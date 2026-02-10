@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgb(24, 24, 27, 0.99);
+  color: #E4E4E7;
+  font-family: "Inter", sans-serif;
+  font-weight: 200;
+  letter-spacing: 1px;
+
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  background-color: #18181B;
+}
+
+.header {
+  text-align: center;
+  font-style: italic;
+  letter-spacing: 2px;
+  padding: 10px;
+}
+
+.header h2 {
+  opacity: 0.5;
+}
+
+.btn {
+  color: #FAFAFA;
+  font-size: 15px;
+  background-color: #F43F5E;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  padding: 10px 20px;
+
+  transition: all 0.5s ease;
+}
+
+.btn:hover {
+  opacity: 0.7;
+  transform: scale(0.95);
+}
+
+textarea {
+  outline: none;
+}
+
+/* MAIN  #F43F5E */
+
+.main {
+  margin-top: 20px;
+}
+
+.ciphers {
+  display: flex;
+  justify-content: space-around;
+  gap: 50px;
+}
+
+.cipher-menu {
+  display: flex;
+  justify-content: space-evenly;
+
+  margin-bottom: 40px;
+}
+
+.active {
+  background-color: #18181B;
+  border: 1.5px solid #F43F5E;
+
+  box-shadow: 0 0 15px black;
+}
+
+.caesar-cipher {
+  display: flex;
+  flex-direction: column;
+
+  border: 1.5px solid rgb(244, 63, 94, 0.8);
+  border-radius: 5%;
+  padding: 10px;
+
+  transition: all 0.5s ease;
+}
+
+.cipher-input {}
+
+.cipher-input textarea {
+  width: 500px;
+  height: 50px;
+  color: rgb(228, 228, 231, 0.6);
+  border-radius: 4px;
+  background: #27272A;
+}
+
+.cipher-key {
+  margin-top: 10px;
+}
+
+.cipher-key input[type="number"] {
+  padding: 10px 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100px;
+  opacity: 0.6;
+}
+
+.cipher-key input[type="text"] {
+  padding: 10px 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 300px;
+  opacity: 0.6;
+}
+
+.results {}
+
+.results__radio {}
+
+.results__radio-group {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 10px 15px;
+}
+
+.results__output {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.results__output textarea {
+  margin-top: 3px;
+
+  width: 500px;
+  height: 200px;
+}
+
+.vigenere-cipher {
+  display: none;
+  flex-direction: column;
+
+  border: 1.5px solid rgb(244, 63, 94, 0.8);
+  border-radius: 5%;
+  padding: 10px;
+
+  transition: all 0.5s ease;
+}
+
+.file-menu {
+  margin-top: 20px;
+}
+
+.file-controls {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.file-info {
+  font-size: 12px;
+}

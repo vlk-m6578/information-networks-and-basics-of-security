@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CipherApp</title>
+  <link rel="stylesheet" href="static/styles/reset.css">
+  <link rel="stylesheet" href="static/styles/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <h2>Elements of cryptography</hрр>
+    </header>
+
+    <main class="main">
+      <div class="cipher-menu">
+        <button class="btn active">Caesar Cipher</button>
+        <button class="btn">Vigenère Cipher</button>
+      </div>
+
+      <div class="ciphers">
+        <div class="caesar-cipher">
+          <div class="cipher-input">
+            <textarea id="text" placeholder="Enter the text to encrypt/decrypt"></textarea>
+          </div>
+
+          <div class="cipher-key">
+            <label for="caesar-key">Key (number from 1 to 25)</label>
+            <input type="range" id="caesar-key-range" min="1" max="25" value="3">
+            <input type="number" id="caesar-key" min="1" max="25" value="3">
+          </div>
+
+          <div class="results">
+            <div class="results__radio">
+              <div class="results__radio-group">
+                <label>
+                  <input type="radio" name="caesar-result" value="encrypt" checked>
+                  Encrypt
+                </label>
+                <label>
+                  <input type="radio" name="caesar-result" value="decrypt">
+                  Decrypt
+                </label>
+              </div>
+              <button class="results__btn btn">Execute</button>
+            </div>
+
+            <div class="results__output">
+              <label for="caesar-result">Result:</label>
+              <textarea id="caesar-result" readonly></textarea>
+            </div>
+          </div>
+
+
+        </div>
+
+        <div class="vigenere-cipher">
+          <div class="cipher-input">
+            <textarea id="text" placeholder="Enter the text to encrypt/decrypt"></textarea>
+          </div>
+
+          <div class="cipher-key">
+            <label for="vigenere-key">Key (string)</label>
+            <input type="text" id="vigenere-key" placeholder="for example, KEY" value="KEY">
+          </div>
+
+          <div class="results">
+            <div class="results__radio">
+              <div class="results__radio-group">
+                <label>
+                  <input type="radio" name="vigenere-result" value="encrypt" checked>
+                  Encrypt
+                </label>
+                <label>
+                  <input type="radio" name="vigenere-result" value="decrypt">
+                  Decrypt
+                </label>
+              </div>
+              <button class="results__btn btn">Execute</button>
+            </div>
+            <div class="results__output">
+              <label for="vigenere-result">Result:</label>
+              <textarea id="vigenere-result" readonly></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="file-menu">
+        <div class="file-section">
+          <div class="file-controls">
+            <div class="file-input-group">
+              <div class="file-buttons">
+                <button id="load-file" class="btn">
+                  Upload file
+                </button>
+                <button id="clear-text" class="btn">
+                  Clear text
+                </button>
+              </div>
+              <!-- (.txt, .cpp, .md, .xml, .html, .css, .js, .py) -->
+            </div>
+
+            <div class="file-input-group">
+              <div class="file-buttons">
+                <button id="save-result" class="btn">
+                  Save result
+                </button>
+                <button id="copy-result" class="btn">
+                  Copy
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="file-info">
+            <p id="current-file">File not selected</p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="static/js/script.js"></script>
+
+</body>
+
+</html>
