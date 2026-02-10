@@ -1,15 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kerberos</title>
 </head>
+
 <body>
   <div class="container">
-    <button>Start demonstration</button>
-    <button>Show an attack</button>
+
+    <section class="auth__section">
+      <div>
+        <input type="text" id="username" placeholder="Username" value="alice">
+        <input type="password" id="password" placeholder="Password" value="password123">
+        <button onclick="authenticate()">Log in</button>
+      </div>
+
+      <div class="auth__result">
+        Result
+      </div>
+    </section>
+
+    <section class="check-tgt__section">
+      <div>
+        <input type="text" id="tgt-id" placeholder="ID TGT" readonly">
+        <button onclick="validateTGT()">Check TGT</button>
+      </div>
+
+      <div class="check-tgt__result">
+        Result
+      </div>
+    </section>
+
+    <section class="debug__section">
+      <button onclick="showDebugInfo()">Info</button>
+      <div class="debug__result">
+        Debug
+      </div>
+    </section>
+
   </div>
 
+  <script>
+    let currentTGT = null;
+
+    async function authenticate() {
+      const username = document.querySelector('#username').value;
+      const password = document.querySelector('#password').value;
+      const resultDiv = document.querySelector('.auth__result');
+
+      resultDiv.innerHTML = '<div class="debug">Request to AS...</div>';
+
+      try {
+        const response = await fetch('/api/authenticate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          currentTGT = data.data.tgt;
+
+          resultDiv.innerHTML = `
+            <div class="success">
+              <div class="debug">
+                <strong>User:</strong> ${username}<br>
+                <strong>TGT ID:</strong> ${data.data.tgt.id}<br>
+                <strong>Session key:</strong> ${data.data.sessionKey.substring(0, 20)}...
+              </div>
+            </div>
+          `;
+
+          document.querySelector('#tgt-id').value = data.data.tgt.id;
+          document.querySelector('.check-tgt__result').innerHTML =
+            '<div class="success">TGT is here</div>';
+        } else {
+          resultDiv.innerHTML = `
+            <div class="error">
+              <strong>Error:</strong> ${data.message}
+            </div>
+          `;
+        }
+
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="error">
+            <strong>NETWORK error:</strong> ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    async function validateTGT() {
+      const tgtId = document.querySelector('#tgt-id').value;
+      const resultDiv = document.querySelector('.check-tgt__result');
+
+      resultDiv.innerHTML = '<div class="debug">Requeest to check TGT...</div>';
+
+      try {
+        const response = await fetch('/api/validate-tgt', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            tgtId: tgtId
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          resultDiv.innerHTML = `
+            <div class="success">
+              <strong>TGT valid</strong>
+              <div class="debug">
+                <strong>User:</strong> ${data.data.username}<br>
+                <strong>Session Key:</strong> ${data.data.sessionKey.substring(0, 20)}...
+              </div>
+            </div>
+          `;
+
+
+        } else {
+          resultDiv.innerHTML = `
+            <div class="error">
+              <strong>TGT invalid:</strong> ${data.message}
+            </div>
+          `;
+        }
+
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="error">
+            <strong>Error:</strong> ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    async function showDebugInfo() {
+      const resultDiv = document.querySelector('.debug__result');
+
+      try {
+        const response = await fetch('/api/debug/tickets');
+        const data = await response.json();
+
+        let debugHTML = '<div class="debug"><strong>Active TGT:</strong><br>';
+
+        if (data.count === 0) {
+          debugHTML += 'No active TGT';
+        } else {
+          for (const [tgtId, ticket] of Object.entries(data.tickets)) {
+            const timeAgo = Math.round((new Date() - new Date(ticket.issuedAt)) / 1000 / 60);
+            debugHTML += `
+              <hr>
+              <strong>ID:</strong> ${tgtId.substring(0, 16)}...<br>
+              <strong>User:</strong> ${ticket.username}<br>
+              <strong>Issue:</strong> ${timeAgo} minutes ago<br>
+              <strong>Session key:</strong> ${ticket.sessionKey.substring(0, 16)}...
+            `;
+          }
+        }
+
+        debugHTML += '</div>';
+        resultDiv.innerHTML = debugHTML;
+
+      } catch (error) {
+        resultDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+      }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Kerberos demonstration');
+    });
+  </script>
+
 </body>
+
 </html>
