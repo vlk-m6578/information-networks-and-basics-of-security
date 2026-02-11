@@ -22,7 +22,20 @@
       </div>
     </section>
 
-    <section class="check-tgt__section">
+    <section class="tgs__section">
+      <select class="service-select">
+        <option value="files">File Service</option>
+        <option value="email">Email Service</option>
+        <option value="print">Print Service</option>
+      </select>
+      <button onclick="requestServiceTicket()">Get Service Ticket</button>
+
+      <div class="tgs__result">
+        Result
+      </div>
+    </section>
+
+    <!-- <section class="check-tgt__section">
       <div>
         <input type="text" id="tgt-id" placeholder="ID TGT" readonly">
         <button onclick="validateTGT()">Check TGT</button>
@@ -31,7 +44,7 @@
       <div class="check-tgt__result">
         Result
       </div>
-    </section>
+    </section> -->
 
     <section class="debug__section">
       <button onclick="showDebugInfo()">Info</button>
@@ -40,10 +53,19 @@
       </div>
     </section>
 
+    <section class="tgs__debug">
+      <button onclick="showTGSInfo()">Show TGS tickets</button>
+      <div class="tgs__debug-result">
+        Debug
+      </div>
+    </section>
+
   </div>
 
   <script>
     let currentTGT = null;
+    let currentServiceTicket = null;
+    let currentServiceSessionKey = null;
 
     async function authenticate() {
       const username = document.querySelector('#username').value;
@@ -179,8 +201,79 @@
       }
     }
 
+    async function requestServiceTicket() {
+      if (!currentTGT) {
+        alert('Firstly use TGT');
+        return;
+      }
 
-    document.addEventListener('DOMContentLoaded', function() {
+      const serviceName = document.querySelector(".service-select").value;
+      const resultDiv = document.querySelector(".tgs__result");
+
+      resultDiv.innerHTML = 'Request to TGS...';
+
+      try {
+        const response = await fetch('/api/request-service-ticket', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tgtId: currentTGT.id,
+            serviceName: serviceName
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          currentServiceTicket = data.data.serviceTicket;
+          currentServiceSessionKey = data.data.serviceSessionKey;
+
+          resultDiv.innerHTML = `
+            <div class="success">
+              <br><strong>Service:</strong> ${data.data.serviceName}
+              <br><strong>ticket ID:</strong> ${data.data.serviceTicket.id}
+              <br><strong>Issue:</strong> ${new Date(data.data.expiresAt).toLocaleTimeString()}
+              <br><strong>Service key:</strong> ${data.data.serviceSessionKey.substring(0, 20)}...
+            </div>
+          `;
+
+        } else {
+          resultDiv.innerHTML = `<div class="error">TGS error: ${data.message}</div>`;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<div class="error">Network error: ${error.message}</div>`;
+      }
+    }
+
+    async function showTGSInfo() {
+      const resultDiv = document.querySelector(".tgs__debug-result");
+
+      try {
+        const response = await fetch('/api/debug/tgs');
+        const data = await response.json();
+
+        let html = '<strong>TGS server:</strong><br>';
+        html += `Available services: ${data.availableServices.join(', ')}<br>`;
+
+        if (data.issuedTicketsCount > 0) {
+          html += '<strong>Active service tickets:</strong>';
+          for (const [id, ticket] of Object.entries(data.activeTickets)) {
+            html += `
+              <hr>
+              <strong>ID:</strong> ${id.substring(0, 20)}...<br>
+              <strong>User:</strong> ${ticket.username}<br>
+              <strong>Service:</strong> ${ticket.serviceName}<br>
+            `;
+          }
+        }
+
+        resultDiv.innerHTML = html;
+      } catch (error) {
+        resultDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
       console.log('Kerberos demonstration');
     });
   </script>

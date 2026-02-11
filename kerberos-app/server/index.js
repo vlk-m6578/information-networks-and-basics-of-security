@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const as = require('./kerberos/as')
+const TicketGrantingServer = require('./kerberos/tgs');
+const tgs = new TicketGrantingServer(as);
 // const WebSocket = require('ws');
 
 const app = express();
@@ -23,7 +25,7 @@ app.get('/', (request, respond) => {
 
 app.post('/api/authenticate', (request, respond) => {
   try {
-    const {username, password} = request.body;
+    const { username, password } = request.body;
 
     console.log(`Request to authentification from ${username}`);
 
@@ -44,7 +46,7 @@ app.post('/api/authenticate', (request, respond) => {
 
 app.post('/api/validate-tgt', (request, respond) => {
   try {
-    const {tgtId } = request.body;
+    const { tgtId } = request.body;
 
     const result = as.validateTGT(tgtId);
 
@@ -66,6 +68,45 @@ app.get('/api/debug/tickets', (req, res) => {
   res.json({
     tickets: as.issuedTickets,
     count: Object.keys(as.issuedTickets).length
+  });
+});
+
+app.post('/api/request-service-ticket', (req, res) => {
+  try {
+    const { tgtId, serviceName } = req.body;
+
+    if (!tgtId || !serviceName) {
+      return res.status(400).json({
+        success: false,
+        message: 'tgtId and serviceName are required'
+      });
+    }
+
+    const result = tgs.requestServiceTicket(tgtId, serviceName);
+
+    res.json({
+      success: true,
+      message: 'Service ticket issued',
+      data: result
+    });
+
+  } catch (error) {
+    console.error('TGS error:', error.message);
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
+app.get('/api/debug/tgs', (req, res) => {
+  const services = Object.keys(tgs.serviceKeys);
+  const ticketsCount = Object.keys(tgs.issuedServiceTickets).length;
+
+  res.json({
+    availableServices: services,
+    issuedTicketsCount: ticketsCount,
+    activeTickets: tgs.issuedServiceTickets
   });
 });
 
