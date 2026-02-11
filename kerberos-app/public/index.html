@@ -5,25 +5,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kerberos</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <div class="container">
 
-    <section class="auth__section">
+    <section class="as__section">
       <div>
         <input type="text" id="username" placeholder="Username" value="alice">
         <input type="password" id="password" placeholder="Password" value="password123">
         <button onclick="authenticate()">Log in</button>
       </div>
 
-      <div class="auth__result">
+      <div class="as__result">
         Result
       </div>
     </section>
 
     <section class="tgs__section">
-      <select class="service-select">
+      <select class="tgs__service-select">
         <option value="files">File Service</option>
         <option value="email">Email Service</option>
         <option value="print">Print Service</option>
@@ -46,18 +47,25 @@
       </div>
     </section> -->
 
-    <section class="debug__section">
+    <section class="as-debug__section">
       <button onclick="showDebugInfo()">Info</button>
-      <div class="debug__result">
+      <div class="as-debug__result">
         Debug
       </div>
     </section>
 
-    <section class="tgs__debug">
+    <section class="tgs-debug__section">
       <button onclick="showTGSInfo()">Show TGS tickets</button>
-      <div class="tgs__debug-result">
+      <div class="tgs-debug__result">
         Debug
       </div>
+    </section>
+
+    <section class="file-service__section">
+      <p><strong>Service Ticket ID:</strong> <span id="display-ticket-id"></span></p>
+      <button onclick="accessFiles()">Get My Files</button>
+      <div id="files-result" class="debug">Result</div>
+      <div id="files-list">Files list</div>
     </section>
 
   </div>
@@ -66,11 +74,14 @@
     let currentTGT = null;
     let currentServiceTicket = null;
     let currentServiceSessionKey = null;
+    let currentUsername = null;
 
     async function authenticate() {
       const username = document.querySelector('#username').value;
       const password = document.querySelector('#password').value;
-      const resultDiv = document.querySelector('.auth__result');
+      const resultDiv = document.querySelector('.as__result');
+
+      currentUsername = username;
 
       resultDiv.innerHTML = '<div class="debug">Request to AS...</div>';
 
@@ -101,9 +112,8 @@
             </div>
           `;
 
-          document.querySelector('#tgt-id').value = data.data.tgt.id;
-          document.querySelector('.check-tgt__result').innerHTML =
-            '<div class="success">TGT is here</div>';
+          // document.querySelector('.check-tgt__result').innerHTML =
+          //   '<div class="success">TGT is here</div>';
         } else {
           resultDiv.innerHTML = `
             <div class="error">
@@ -170,7 +180,7 @@
     }
 
     async function showDebugInfo() {
-      const resultDiv = document.querySelector('.debug__result');
+      const resultDiv = document.querySelector('.as-debug__result');
 
       try {
         const response = await fetch('/api/debug/tickets');
@@ -207,7 +217,7 @@
         return;
       }
 
-      const serviceName = document.querySelector(".service-select").value;
+      const serviceName = document.querySelector(".tgs__service-select").value;
       const resultDiv = document.querySelector(".tgs__result");
 
       resultDiv.innerHTML = 'Request to TGS...';
@@ -246,7 +256,7 @@
     }
 
     async function showTGSInfo() {
-      const resultDiv = document.querySelector(".tgs__debug-result");
+      const resultDiv = document.querySelector(".tgs-debug__result");
 
       try {
         const response = await fetch('/api/debug/tgs');
@@ -271,6 +281,84 @@
       } catch (error) {
         resultDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
       }
+    }
+
+    async function accessFiles() {
+      if (!currentServiceTicket) {
+        alert('Firstly get service ticket!');
+        return;
+      }
+
+      const resultDiv = document.querySelector('#files-result');
+      const filesListDiv = document.querySelector('#files-list');
+
+      resultDiv.innerHTML = 'Request...';
+      filesListDiv.style.display = 'none';
+
+      try {
+        const authData = {
+          username: currentUsername,
+          timestamp: new Date().toISOString(),
+          random: crypto.randomBytes
+            ? crypto.randomBytes(8).toString('hex')
+            : Math.random().toString(36).substring(2)
+        };
+
+        const encryptedAuthenticator = encryptWithKey(
+          JSON.stringify(authData),
+          currentServiceSessionKey
+        );
+
+        const response = await fetch('/api/access-files', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            encryptedTicket: currentServiceTicket.encrypted,
+            authenticator: encryptedAuthenticator
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          resultDiv.innerHTML = `
+        <div class="success">
+          There are ${data.count} files for ${data.username}
+        </div>
+      `;
+
+          let filesHTML = '<h3>Your files:</h3><table border="1" style="width:100%; border-collapse: collapse;">';
+          filesHTML += '<tr><th>FileName</th><th>Size</th><th>Changed</th></tr>';
+
+          data.files.forEach(file => {
+            filesHTML += `
+          <tr>
+            <td>${file.name}</td>
+            <td>${file.size}</td>
+            <td>${file.modified}</td>
+          </tr>
+        `;
+          });
+
+          filesHTML += '</table>';
+          filesListDiv.innerHTML = filesHTML;
+          filesListDiv.style.display = 'block';
+
+        } else {
+          resultDiv.innerHTML = `<div class="error">Access error: ${data.message}</div>`;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<div class="error">Network error: ${error.message}</div>`;
+      }
+    }
+
+    function encryptWithKey(text, key) {
+      let encrypted = '';
+      for (let i = 0; i < text.length; i++) {
+        const charCode = text.charCodeAt(i) ^ key.charCodeAt(i % key.length);
+        encrypted += String.fromCharCode(charCode);
+      }
+      return btoa(encrypted);
     }
 
     document.addEventListener('DOMContentLoaded', function () {

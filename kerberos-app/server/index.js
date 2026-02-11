@@ -1,12 +1,16 @@
 const express = require('express');
 const path = require('path');
 const as = require('./kerberos/as')
+
 const TicketGrantingServer = require('./kerberos/tgs');
-const tgs = new TicketGrantingServer(as);
+const FileService = require('./services/fileService');
 // const WebSocket = require('ws');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const tgs = new TicketGrantingServer(as);
+const fileService = new FileService(tgs); 
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
@@ -108,6 +112,21 @@ app.get('/api/debug/tgs', (req, res) => {
     issuedTicketsCount: ticketsCount,
     activeTickets: tgs.issuedServiceTickets
   });
+});
+
+app.post('/api/access-files', (req, res) => {
+  try {
+    const { encryptedTicket, authenticator } = req.body;
+    
+    const result = fileService.accessFiles(encryptedTicket, authenticator);
+    
+    res.json(result);
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
 });
 
 app.listen(PORT, () => {

@@ -54,11 +54,11 @@ class TicketGrantingServer {
 
   generateServiceTicket(username, serviceName, serviceSessionKey, clientSessionKey) {
     const ticketData = {
-      id: crypto.randomBytes(16).toString('hex'), 
+      id: crypto.randomBytes(16).toString('hex'),
       username: username,
       serviceName: serviceName,
       issuedAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + 300000).toISOString(), 
+      expiresAt: new Date(Date.now() + 300000).toISOString(),
       serviceSessionKey: serviceSessionKey
     };
 
@@ -74,6 +74,51 @@ class TicketGrantingServer {
       id: ticketData.id,
       expiresAt: ticketData.expiresAt
     };
+  }
+
+  validateServiceTicket(encryptedTicket, serviceName) {
+    try {
+      const serviceKey = this.serviceKeys[serviceName];
+      if (!serviceKey) {
+        console.log(`TGS: Service ${serviceName} not found`);
+        return { valid: false, reason: 'Service not found' };
+      }
+
+      const parts = encryptedTicket.split(':');
+      const iv = Buffer.from(parts[0], 'hex');
+      const encrypted = parts[1];
+
+      const decipher = crypto.createDecipheriv('aes-256-cbc', serviceKey, iv);
+      let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+      decrypted += decipher.final('utf8');
+
+      const ticketData = JSON.parse(decrypted);
+
+      const expiresAt = new Date(ticketData.expiresAt);
+      if (new Date() > expiresAt) {
+        console.log(`TGS: Ticket expired`);
+        return { valid: false, reason: 'Ticket expired' };
+      }
+
+      if (ticketData.serviceName !== serviceName) {
+        console.log(`TGS: Ticket for another service (${ticketData.serviceName} != ${serviceName})`);
+        return { valid: false, reason: 'Wrong service' };
+      }
+
+      console.log(`TGS: Ticket valid for ${ticketData.username}`);
+
+      return {
+        valid: true,
+        username: ticketData.username,
+        serviceName: ticketData.serviceName,
+        serviceSessionKey: ticketData.serviceSessionKey,
+        ticketId: ticketData.id
+      };
+
+    } catch (error) {
+      console.error(`TGS: Invalid ticket format:`, error.message);
+      return { valid: false, reason: 'Invalid ticket format' };
+    }
   }
 
   encrypt(text, key) {
