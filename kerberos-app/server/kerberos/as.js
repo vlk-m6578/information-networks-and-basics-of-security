@@ -11,7 +11,6 @@ class AuthenticationServer {
   }
 
   authenticate(username, password) {
-    // Проверка блокировки
     if (this.lockedAccounts[username]) {
       throw new Error('Account locked');
     }
@@ -21,11 +20,9 @@ class AuthenticationServer {
       'bob': 'qwerty123'
     };
 
-    // Неверный пароль - увеличиваем счетчик
     if (!validUsers[username] || validUsers[username] !== password) {
       this.failedLogins[username] = (this.failedLogins[username] || 0) + 1;
 
-      // Блокировка после 5 попыток
       if (this.failedLogins[username] >= 5) {
         this.lockedAccounts[username] = true;
       }
@@ -33,8 +30,6 @@ class AuthenticationServer {
       throw new Error('Invalid credentials');
     }
 
-    // УСПЕХ - НЕ СБРАСЫВАЕМ СЧЕТЧИК!
-    // Просто снимаем блокировку, счетчик остается
     delete this.lockedAccounts[username];
 
     const tgt = this.generateTGT(username);
@@ -56,7 +51,6 @@ class AuthenticationServer {
     };
   }
 
-  // ✅ Записываем неудачные попытки
   recordFailedLogin(username) {
     this.failedLogins[username] = (this.failedLogins[username] || 0) + 1;
 

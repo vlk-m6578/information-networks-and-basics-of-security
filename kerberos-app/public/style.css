@@ -11,6 +11,13 @@ body {
 
 }
 
+hr {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.6;
+}
+
 /* Bold  700  Regular  400  Medium 500 */
 
 .container {
@@ -24,11 +31,23 @@ body {
   gap: 10px;
 
   margin-top: 10px;
+
+  color: #00B37E;
+}
+
+.special {
+  margin-left: 40px;
 }
 
 .debug {
   color: #00B37E;
   font-weight: 700;
+}
+
+.debug-title {
+  margin: 10px 0;
+  color: #C4C4CC;
+  opacity: 0.6;
 }
 
 .icon::before {
@@ -44,6 +63,19 @@ body {
   background: #00875F;
   border-radius: 8px;
   color: #fff;
+
+  transition: all 0.3s linear;
+}
+
+.button:hover {
+  opacity: 0.8;
+}
+
+.as-tgs-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  align-items: flex-start;
 }
 
 /* === AS === */
@@ -52,25 +84,147 @@ body {
   padding: 40px;
   border-radius: 8px;
 
+  width: 430px;
 }
-
 
 .as__section-input-group>input {
   background: #121214;
   border: 1px solid #00B37E;
   border-radius: 8px;
   color: #C4C4CC;
-  font-size: 16px;
+  font-size: 15px;
 
   width: 150px;
   height: 30px;
 
-
+  padding-left: 5px;
 }
-
 
 .as__result {}
 
-.service-ticket-id {
-  color: blue;
+/* === TGS === */
+.tgs__section {
+  background-color: #202024;
+  padding: 40px;
+  border-radius: 8px;
+
+  font-size: 15px;
+  width: 430px;
 }
+
+.elements-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.tgs__service-select {
+  padding: 8px 24px;
+  border: 1px solid #00B37E;
+  border-radius: 8px;
+  background-color: #202024;
+  font-weight: 700;
+  font-size: 16px;
+  color: #C4C4CC;
+
+}
+
+.tgs__result {}
+
+/* === SERVICE === */
+.file-service__section {}
+
+/* === FILES === */
+.file-service__section {
+  display: flex;
+  justify-self: center;
+  justify-content: center;
+
+  background-color: #202024;
+  padding: 40px;
+  border-radius: 8px;
+  margin-top: 40px;
+  width: 400px;
+
+  font-size: 15px;
+
+}
+
+.files-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.files-title {
+  margin-bottom: 10px;
+  color: #C4C4CC;
+  opacity: 0.6;
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background-color: #C4C4CC;
+  padding: 14px 10px;
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 1px solid #E1E1E6;
+  color: #202024;
+}
+
+td {
+  padding: 12px 10px;
+}
+
+tr {
+  transition: all 0.3s linear;
+}
+
+tr:hover {
+  opacity: 0.9;
+}
+
+
+/* === DEBUG === */
+.debug-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 230px;
+  align-items: flex-start;
+
+}
+
+.as-debug__section {
+  background-color: #202024;
+  padding: 40px;
+  border-radius: 8px;
+  margin-top: 40px;
+  width: 400px;
+
+  font-size: 15px;
+  text-align: center;
+}
+
+.as-debug__result {}
+
+.tgs-debug__section {
+  background-color: #202024;
+  padding: 40px;
+  border-radius: 8px;
+  margin-top: 40px;
+  width: 400px;
+
+  font-size: 15px;
+  text-align: center;
+
+}
+
+.tgs-debug__result {}

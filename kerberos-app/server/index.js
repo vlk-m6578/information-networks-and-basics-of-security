@@ -5,7 +5,6 @@ const as = require('./kerberos/as')
 const TicketGrantingServer = require('./kerberos/tgs');
 const FileService = require('./services/fileService');
 const AttackManager = require('./attacks/attackManager');
-// const WebSocket = require('ws');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,8 +15,6 @@ const attackManager = new AttackManager(as, tgs, fileService);
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
-
-// const wss = new WebSocket.Server({port: 8080});
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -131,53 +128,46 @@ app.post('/api/access-files', (req, res) => {
   }
 });
 
-// ============================
+// app.get('/attacks', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../public/attacks.html'));
+// });
+// app.post('/api/attack/replay', async (req, res) => {
+//   try {
+//     // Используем тестовые данные
+//     const testAuth = FileService.createAuthenticator('alice', 'test-key-123');
+//     const testTicket = { encrypted: 'test-ticket' };
 
-app.get('/attacks', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/attacks.html'));
-});
+//     const result = await attackManager.demonstrateReplayAttack(testAuth, testTicket);
+//     res.json({
+//       protected: result.protected,
+//       message: result.message
+//     });
+//   } catch (error) {
+//     res.json({ protected: true, message: 'Attack blocked' });
+//   }
+// });
 
-// Replay attack demo
-app.post('/api/attack/replay', async (req, res) => {
-  try {
-    // Используем тестовые данные
-    const testAuth = FileService.createAuthenticator('alice', 'test-key-123');
-    const testTicket = { encrypted: 'test-ticket' };
+// app.get('/api/attack/log', (req, res) => {
+//   const logs = attackManager.getAttackLog();
+//   res.json({ logs });
+// });
 
-    const result = await attackManager.demonstrateReplayAttack(testAuth, testTicket);
-    res.json({
-      protected: result.protected,
-      message: result.message
-    });
-  } catch (error) {
-    res.json({ protected: true, message: 'Attack blocked' });
-  }
-});
+// app.post('/api/attack/tgt-theft', async (req, res) => {
+//   try {
+//     const { tgtId } = req.body;
 
-// Attack log
-app.get('/api/attack/log', (req, res) => {
-  const logs = attackManager.getAttackLog();
-  res.json({ logs });
-});
+//     const testTGTId = tgtId || 'stolen-tgt-12345';
 
-// ============= TGT THEFT ATTACK =============
-app.post('/api/attack/tgt-theft', async (req, res) => {
-  try {
-    const { tgtId } = req.body;
-
-    // Берем TGT алисы или тестовый
-    const testTGTId = tgtId || 'stolen-tgt-12345';
-
-    const result = await attackManager.demonstrateTGTTheftAttack(testTGTId);
-    res.json(result);
-  } catch (error) {
-    res.json({
-      success: false,
-      protected: true,
-      message: '✅ PROTECTED: Attack blocked'
-    });
-  }
-});
+//     const result = await attackManager.demonstrateTGTTheftAttack(testTGTId);
+//     res.json(result);
+//   } catch (error) {
+//     res.json({
+//       success: false,
+//       protected: true,
+//       message: 'PROTECTED: Attack blocked'
+//     });
+//   }
+// });
 
 app.listen(PORT, () => {
   console.log(`Server is running: ${PORT}`);

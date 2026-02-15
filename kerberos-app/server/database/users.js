@@ -2,20 +2,12 @@ const usersDatabase = {
   'alice': {
     password: 'password123',
     name: 'Alice',
-    role: 'student',
     services: ['files', 'email', 'print']
   },
   'bob': {
     password: 'qwerty123',
     name: 'Bob',
-    role: 'teacher',
     services: ['files', 'email', 'print', 'admin']
-  },
-  'eva': {
-    password: 'aboba123',
-    name: 'Eva',
-    role: 'attacker',
-    services: []
   }
 }
 

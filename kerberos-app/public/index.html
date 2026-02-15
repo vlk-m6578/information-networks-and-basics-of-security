@@ -11,30 +11,35 @@
 <body>
   <div class="container">
 
-    <section class="as__section">
-      <div class="as__section-input-group">
-        <input type="text" id="username" placeholder="Username" value="alice">
-        <input type="password" id="password" placeholder="Password" value="password123">
-        <button class="button" onclick="authenticate()">Log in</button>
-      </div>
+    <div class="as-tgs-wrapper">
+      <section class="as__section">
+        <div class="as__section-input-group">
+          <input type="text" id="username" placeholder="Username" value="alice">
+          <input type="password" id="password" placeholder="Password" value="password123">
+          <button class="button" onclick="authenticate()">Log in</button>
+        </div>
 
-      <div class="as__result">
+        <div class="as__result">
 
-      </div>
-    </section>
+        </div>
+      </section>
 
-    <section class="tgs__section">
-      <select class="tgs__service-select">
-        <option value="files">File Service</option>
-        <option value="email">Email Service</option>
-        <option value="print">Print Service</option>
-      </select>
-      <button onclick="requestServiceTicket()">Get Service Ticket</button>
+      <section class="tgs__section">
+        <div class="elements-wrapper">
+          <select class="tgs__service-select">
+            <option value="files">File Service</option>
+            <!-- <option value="email">Email Service</option>
+            <option value="print">Print Service</option> -->
+          </select>
+          <button class="button" onclick="requestServiceTicket()">Get Service Ticket</button>
+        </div>
 
-      <div class="tgs__result">
-        Result
-      </div>
-    </section>
+        <div class="tgs__result">
+
+        </div>
+      </section>
+    </div>
+
 
     <!-- <section class="check-tgt__section">
       <div>
@@ -49,24 +54,27 @@
 
 
     <section class="file-service__section">
-      <p style="margin: 0;" class="service-ticket-id">Service Ticket ID:<span id="display-ticket-id"></span></p>
-      <button onclick="accessFiles()">Get My Files</button>
-      <div id="files-result" class="debug">Result</div>
-      <div id="files-list">Files list</div>
+      <div class="files-wrapper">
+        <div class="button-wrapper">
+          <button class="button" onclick="accessFiles()">Get My Files</button>
+        </div>
+        <div id="files-result" class="debug"></div>
+        <div id="files-list"></div>
+      </div>
     </section>
 
     <div class="debug-wrapper">
       <section class="as-debug__section">
-        <button onclick="showDebugInfo()">Info</button>
+        <button class="button" onclick="showDebugInfo()">Show TGT</button>
         <div class="as-debug__result">
-          Debug
+          
         </div>
       </section>
 
       <section class="tgs-debug__section">
-        <button onclick="showTGSInfo()">Show TGS tickets</button>
+        <button class="button" onclick="showTGSInfo()">Show TGS tickets</button>
         <div class="tgs-debug__result">
-          Debug
+          
         </div>
       </section>
     </div>
@@ -197,7 +205,7 @@
         const response = await fetch('/api/debug/tickets');
         const data = await response.json();
 
-        let debugHTML = '<div class="debug"><strong>Active TGT:</strong><br>';
+        let debugHTML = '<div class="debug"><strong><p class="debug-title">Active TGT:</p></strong>';
 
         if (data.count === 0) {
           debugHTML += 'No active TGT';
@@ -231,7 +239,7 @@
       const serviceName = document.querySelector(".tgs__service-select").value;
       const resultDiv = document.querySelector(".tgs__result");
 
-      resultDiv.innerHTML = 'Request to TGS...';
+      resultDiv.innerHTML = '<div class="debug">Request to TGS...</div>';
 
       try {
         const response = await fetch('/api/request-service-ticket', {
@@ -250,11 +258,13 @@
           currentServiceSessionKey = data.data.serviceSessionKey;
 
           resultDiv.innerHTML = `
-            <div class="success">
-              <br><strong>Service:</strong> ${data.data.serviceName}
-              <br><strong>ticket ID:</strong> ${data.data.serviceTicket.id}
-              <br><strong>Issue:</strong> ${new Date(data.data.expiresAt).toLocaleTimeString()}
-              <br><strong>Service key:</strong> ${data.data.serviceSessionKey.substring(0, 20)}...
+            <div class="success special">
+              <span class="icon"></span>
+              <div class="debug">
+              <strong>ticket ID:</strong> ${data.data.serviceTicket.id}<br>
+              <strong>Issue:</strong> ${new Date(data.data.expiresAt).toLocaleTimeString()}<br>
+              <strong>Service key:</strong> ${data.data.serviceSessionKey.substring(0, 20)}...<br>
+              </div>
             </div>
           `;
 
@@ -273,11 +283,10 @@
         const response = await fetch('/api/debug/tgs');
         const data = await response.json();
 
-        let html = '<strong>TGS server:</strong><br>';
-        html += `Available services: ${data.availableServices.join(', ')}<br>`;
+        let html = '';
 
         if (data.issuedTicketsCount > 0) {
-          html += '<strong>Active service tickets:</strong>';
+          html += '<div class="debug"><strong><p class="debug-title">Active service tickets:</p></strong>';
           for (const [id, ticket] of Object.entries(data.activeTickets)) {
             html += `
               <hr>
@@ -288,6 +297,7 @@
           }
         }
 
+        html += '</div>';
         resultDiv.innerHTML = html;
       } catch (error) {
         resultDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
@@ -334,11 +344,11 @@
         if (data.success) {
           resultDiv.innerHTML = `
         <div class="success">
-          There are ${data.count} files for ${data.username}
+          
         </div>
       `;
 
-          let filesHTML = '<h3>Your files:</h3><table border="1" style="width:100%; border-collapse: collapse;">';
+          let filesHTML = '<p class="files-title"><strong>Your files:</strong></p><table border="1">';
           filesHTML += '<tr><th>FileName</th><th>Size</th><th>Changed</th></tr>';
 
           data.files.forEach(file => {

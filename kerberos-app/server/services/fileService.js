@@ -24,7 +24,6 @@ class FileService {
 
   accessFiles(encryptedTicket, authenticator) {
     try {
-      // Проверка билета
       const ticketValidation = this.tgs.validateServiceTicket(
         encryptedTicket,
         this.serviceName
@@ -37,7 +36,6 @@ class FileService {
         };
       }
 
-      // Проверка authenticator с timestamp
       const authValidation = this.verifyAuthenticator(
         authenticator,
         ticketValidation.serviceSessionKey,
@@ -71,10 +69,8 @@ class FileService {
 
   verifyAuthenticator(encryptedAuthenticator, serviceSessionKey, expectedUsername) {
     try {
-      // Декодируем base64
       const decoded = Buffer.from(encryptedAuthenticator, 'base64').toString('utf8');
 
-      // XOR расшифровка
       let decrypted = '';
       for (let i = 0; i < decoded.length; i++) {
         const charCode = decoded.charCodeAt(i) ^ serviceSessionKey.charCodeAt(i % serviceSessionKey.length);
@@ -83,7 +79,6 @@ class FileService {
 
       const authData = JSON.parse(decrypted);
 
-      // Проверяем username
       if (authData.username !== expectedUsername) {
         return { valid: false, reason: 'Username mismatch' };
       }
@@ -110,7 +105,6 @@ class FileService {
       timestamp: new Date().toISOString()
     };
 
-    // XOR шифрование
     const jsonStr = JSON.stringify(authData);
     let encrypted = '';
     for (let i = 0; i < jsonStr.length; i++) {
