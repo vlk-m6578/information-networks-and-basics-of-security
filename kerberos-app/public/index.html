@@ -67,14 +67,14 @@
       <section class="as-debug__section">
         <button class="button" onclick="showDebugInfo()">Show TGT</button>
         <div class="as-debug__result">
-          
+
         </div>
       </section>
 
       <section class="tgs-debug__section">
         <button class="button" onclick="showTGSInfo()">Show TGS tickets</button>
         <div class="tgs-debug__result">
-          
+
         </div>
       </section>
     </div>
@@ -293,6 +293,8 @@
               <strong>ID:</strong> ${id.substring(0, 20)}...<br>
               <strong>User:</strong> ${ticket.username}<br>
               <strong>Service:</strong> ${ticket.serviceName}<br>
+              <strong>Issued:</strong> ${new Date(ticket.issuedAt).toLocaleTimeString()}<br>
+  <strong>Expires:</strong> ${new Date(new Date(ticket.issuedAt).getTime() + 5 * 60000).toLocaleTimeString()}<br>
             `;
           }
         }

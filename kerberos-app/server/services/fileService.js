@@ -15,9 +15,6 @@ class FileService {
         { name: 'lecture.pptx', size: '3.1 MB', modified: '2024-01-15' },
         { name: 'grades.xlsx', size: '156 KB', modified: '2024-01-12' },
         { name: 'research.pdf', size: '2.8 MB', modified: '2024-01-10' }
-      ],
-      'eva': [
-        { name: 'hack.txt', size: '1 KB', modified: '2024-01-15' }
       ]
     };
   }
