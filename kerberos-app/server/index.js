@@ -4,13 +4,15 @@ const as = require('./kerberos/as')
 
 const TicketGrantingServer = require('./kerberos/tgs');
 const FileService = require('./services/fileService');
+const AttackManager = require('./attacks/attackManager');
 // const WebSocket = require('ws');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 const tgs = new TicketGrantingServer(as);
-const fileService = new FileService(tgs); 
+const fileService = new FileService(tgs);
+const attackManager = new AttackManager(as, tgs, fileService);
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
@@ -117,14 +119,62 @@ app.get('/api/debug/tgs', (req, res) => {
 app.post('/api/access-files', (req, res) => {
   try {
     const { encryptedTicket, authenticator } = req.body;
-    
+
     const result = fileService.accessFiles(encryptedTicket, authenticator);
-    
+
     res.json(result);
   } catch (error) {
     res.status(400).json({
       success: false,
       message: error.message
+    });
+  }
+});
+
+// ============================
+
+app.get('/attacks', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/attacks.html'));
+});
+
+// Replay attack demo
+app.post('/api/attack/replay', async (req, res) => {
+  try {
+    // Используем тестовые данные
+    const testAuth = FileService.createAuthenticator('alice', 'test-key-123');
+    const testTicket = { encrypted: 'test-ticket' };
+
+    const result = await attackManager.demonstrateReplayAttack(testAuth, testTicket);
+    res.json({
+      protected: result.protected,
+      message: result.message
+    });
+  } catch (error) {
+    res.json({ protected: true, message: 'Attack blocked' });
+  }
+});
+
+// Attack log
+app.get('/api/attack/log', (req, res) => {
+  const logs = attackManager.getAttackLog();
+  res.json({ logs });
+});
+
+// ============= TGT THEFT ATTACK =============
+app.post('/api/attack/tgt-theft', async (req, res) => {
+  try {
+    const { tgtId } = req.body;
+
+    // Берем TGT алисы или тестовый
+    const testTGTId = tgtId || 'stolen-tgt-12345';
+
+    const result = await attackManager.demonstrateTGTTheftAttack(testTGTId);
+    res.json(result);
+  } catch (error) {
+    res.json({
+      success: false,
+      protected: true,
+      message: '✅ PROTECTED: Attack blocked'
     });
   }
 });

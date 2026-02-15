@@ -12,14 +12,14 @@
   <div class="container">
 
     <section class="as__section">
-      <div>
+      <div class="as__section-input-group">
         <input type="text" id="username" placeholder="Username" value="alice">
         <input type="password" id="password" placeholder="Password" value="password123">
-        <button onclick="authenticate()">Log in</button>
+        <button class="button" onclick="authenticate()">Log in</button>
       </div>
 
       <div class="as__result">
-        Result
+
       </div>
     </section>
 
@@ -47,26 +47,36 @@
       </div>
     </section> -->
 
-    <section class="as-debug__section">
-      <button onclick="showDebugInfo()">Info</button>
-      <div class="as-debug__result">
-        Debug
-      </div>
-    </section>
-
-    <section class="tgs-debug__section">
-      <button onclick="showTGSInfo()">Show TGS tickets</button>
-      <div class="tgs-debug__result">
-        Debug
-      </div>
-    </section>
 
     <section class="file-service__section">
-      <p><strong>Service Ticket ID:</strong> <span id="display-ticket-id"></span></p>
+      <p style="margin: 0;" class="service-ticket-id">Service Ticket ID:<span id="display-ticket-id"></span></p>
       <button onclick="accessFiles()">Get My Files</button>
       <div id="files-result" class="debug">Result</div>
       <div id="files-list">Files list</div>
     </section>
+
+    <div class="debug-wrapper">
+      <section class="as-debug__section">
+        <button onclick="showDebugInfo()">Info</button>
+        <div class="as-debug__result">
+          Debug
+        </div>
+      </section>
+
+      <section class="tgs-debug__section">
+        <button onclick="showTGSInfo()">Show TGS tickets</button>
+        <div class="tgs-debug__result">
+          Debug
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================= -->
+
+    <!-- <button onclick="window.location.href='/attacks'" style="margin-top: 20px; background: #dc3545;">
+      Test Attacks →
+    </button> -->
+
 
   </div>
 
@@ -104,6 +114,7 @@
 
           resultDiv.innerHTML = `
             <div class="success">
+              <span class="icon"></span>
               <div class="debug">
                 <strong>User:</strong> ${username}<br>
                 <strong>TGT ID:</strong> ${data.data.tgt.id}<br>

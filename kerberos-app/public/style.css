@@ -1,18 +1,76 @@
+body {
+  box-sizing: border-box;
+
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+
+  color: #C4C4CC;
+  background-color: #121214;
+  font-size: 16px;
+
+}
+
+/* Bold  700  Regular  400  Medium 500 */
+
 .container {
-  /* display: flex;
-  gap: 20px; */
+  max-width: 1200px;
+  margin: 20px auto;
 }
 
+.success {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-top: 10px;
+}
+
+.debug {
+  color: #00B37E;
+  font-weight: 700;
+}
+
+.icon::before {
+  content: url('img/info.svg');
+}
+
+.button {
+  border: none;
+
+  font-weight: 700;
+  font-size: 16px;
+  padding: 8px 24px;
+  background: #00875F;
+  border-radius: 8px;
+  color: #fff;
+}
+
+/* === AS === */
 .as__section {
+  background-color: #202024;
+  padding: 40px;
+  border-radius: 8px;
 
 }
-.as__result {
+
+
+.as__section-input-group>input {
+  background: #121214;
+  border: 1px solid #00B37E;
+  border-radius: 8px;
+  color: #C4C4CC;
+  font-size: 16px;
+
+  width: 150px;
+  height: 30px;
+
+
 }
-.as-debug__section {
-}
-.as-debug__result {
-}
-.tgs-debug__section {
-}
-.tgs-debug__result {
+
+
+.as__result {}
+
+.service-ticket-id {
+  color: blue;
 }

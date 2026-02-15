@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kerberos Attacks Demo</title>
+</head>
+
+<body>
+  <h1>Kerberos: Attacks & Protection</h1>
+
+  <!-- Attack 1: Replay -->
+  <div class="section">
+    <h2>1. Replay Attack</h2>
+    <p>Captured authenticator is reused after delay</p>
+    <button onclick="demoReplay()">Test Replay Attack</button>
+    <div id="replay-result" class="result">Ready</div>
+  </div>
+
+  <!-- Attack 2: TGT Theft -->
+  <div class="section">
+    <h2>2. TGT Theft Attack</h2>
+    <p>Attacker steals TGT ID and tries to get service ticket</p>
+    <button onclick="demoTGTTheft()">Test TGT Theft Attack</button>
+    <div id="tgt-result" class="result">Ready</div>
+  </div>
+
+
+
+  <!-- Attack Log -->
+  <div class="section">
+    <h2>Attack Log</h2>
+    <button onclick="loadLog()">Refresh Log</button>
+    <div id="attack-log" class="result" style="white-space: pre;">No attacks logged</div>
+  </div>
+
+  <!-- Back to main -->
+  <div style="margin-top: 20px;">
+    <a href="/" style="color: #666;">← Back to Kerberos demo</a>
+  </div>
+
+  <script>
+    async function demoReplay() {
+      const resultDiv = document.getElementById('replay-result');
+      resultDiv.innerHTML = 'Testing replay attack...';
+
+      try {
+        const response = await fetch('/api/attack/replay', {
+          method: 'POST'
+        });
+        const data = await response.json();
+
+        if (data.protected) {
+          resultDiv.innerHTML = `<span class="success">✅ ${data.message}</span>`;
+        } else {
+          resultDiv.innerHTML = `<span class="error">❌ ${data.message}</span>`;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<span class="error">Error: ${error.message}</span>`;
+      }
+    }
+
+
+    async function demoTGTTheft() {
+      const resultDiv = document.getElementById('tgt-result');
+      resultDiv.innerHTML = 'Testing TGT theft attack...';
+
+      try {
+        const response = await fetch('/api/attack/tgt-theft', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tgtId: 'fake-tgt-123' })
+        });
+        const data = await response.json();
+
+        if (data.protected) {
+          resultDiv.innerHTML = `<span style="color: green;">✅ ${data.message}</span>`;
+        } else {
+          resultDiv.innerHTML = `<span style="color: red;">❌ ${data.message}</span>`;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<span style="color: red;">Error: ${error.message}</span>`;
+      }
+    }
+
+    async function loadLog() {
+      try {
+        const response = await fetch('/api/attack/log');
+        const data = await response.json();
+
+        if (data.logs && data.logs.length > 0) {
+          let html = '';
+          data.logs.forEach(log => {
+            const time = new Date(log.timestamp).toLocaleTimeString();
+            html += `[${time}] ${log.type}: ${log.result.message}\n`;
+          });
+          document.getElementById('attack-log').innerHTML = html;
+        } else {
+          document.getElementById('attack-log').innerHTML = 'No attacks logged';
+        }
+      } catch (error) {
+        document.getElementById('attack-log').innerHTML = 'Error loading log';
+      }
+    }
+  </script>
+</body>
+
+</html>

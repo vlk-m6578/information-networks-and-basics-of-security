@@ -18,7 +18,6 @@ class TicketGrantingServer {
     const tgtValidation = this.as.validateTGT(tgtId);
 
     if (!tgtValidation.valid) throw new Error(`Invalid TGT: ${tgtValidation.reason}`);
-
     if (!this.serviceKeys[serviceName]) throw new Error(`Service "${serviceName}" not available`);
 
     const serviceSessionKey = crypto.randomBytes(32).toString('hex');
@@ -80,7 +79,6 @@ class TicketGrantingServer {
     try {
       const serviceKey = this.serviceKeys[serviceName];
       if (!serviceKey) {
-        console.log(`TGS: Service ${serviceName} not found`);
         return { valid: false, reason: 'Service not found' };
       }
 
@@ -96,16 +94,12 @@ class TicketGrantingServer {
 
       const expiresAt = new Date(ticketData.expiresAt);
       if (new Date() > expiresAt) {
-        console.log(`TGS: Ticket expired`);
         return { valid: false, reason: 'Ticket expired' };
       }
 
       if (ticketData.serviceName !== serviceName) {
-        console.log(`TGS: Ticket for another service (${ticketData.serviceName} != ${serviceName})`);
         return { valid: false, reason: 'Wrong service' };
       }
-
-      console.log(`TGS: Ticket valid for ${ticketData.username}`);
 
       return {
         valid: true,
@@ -116,8 +110,7 @@ class TicketGrantingServer {
       };
 
     } catch (error) {
-      console.error(`TGS: Invalid ticket format:`, error.message);
-      return { valid: false, reason: 'Invalid ticket format' };
+      return { valid: false, reason: 'Invalid ticket' };
     }
   }
 
@@ -127,46 +120,6 @@ class TicketGrantingServer {
     let encrypted = cipher.update(text, 'utf8', 'hex');
     encrypted += cipher.final('hex');
     return iv.toString('hex') + ':' + encrypted;
-  }
-
-  validateServiceTicket(encryptedTicket, serviceName) {
-    try {
-      const serviceKey = this.serviceKeys[serviceName];
-      if (!serviceKey) {
-        console.log(`TGS: Unknown service: ${serviceName}`);
-        return { valid: false, reason: 'Unknown service' };
-      }
-
-      const parts = encryptedTicket.split(':');
-      const iv = Buffer.from(parts[0], 'hex');
-      const encrypted = parts[1];
-
-      const decipher = crypto.createDecipheriv('aes-256-cbc', serviceKey, iv);
-      let decrypted = decipher.update(encrypted, 'hex', 'utf8');
-      decrypted += decipher.final('utf8');
-
-      const ticketData = JSON.parse(decrypted);
-
-      const expiresAt = new Date(ticketData.expiresAt);
-      if (new Date() > expiresAt) {
-        console.log(`TGS: The ticket is expired`);
-        return { valid: false, reason: 'Ticket expired' };
-      }
-
-      console.log(`TGS: The ticket is valid for ${ticketData.username}`);
-
-      return {
-        valid: true,
-        username: ticketData.username,
-        serviceName: ticketData.serviceName,
-        serviceSessionKey: ticketData.serviceSessionKey,
-        ticketId: ticketData.id
-      };
-
-    } catch (error) {
-      console.log(`TGS: Check ticket error: ${error.message}`);
-      return { valid: false, reason: 'Invalid ticket' };
-    }
   }
 
 }

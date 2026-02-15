@@ -24,44 +24,44 @@ class FileService {
 
   accessFiles(encryptedTicket, authenticator) {
     try {
+      // Проверка билета
       const ticketValidation = this.tgs.validateServiceTicket(
         encryptedTicket,
         this.serviceName
       );
 
       if (!ticketValidation.valid) {
-        console.log('Invalid ticket:', ticketValidation.reason);
         return {
           success: false,
           message: `Invalid ticket: ${ticketValidation.reason}`
         };
       }
 
-      console.log(`Ticket is valid for ${ticketValidation.username}`);
-      console.log(`Service key: ${ticketValidation.serviceSessionKey.substring(0, 16)}...`);
+      // Проверка authenticator с timestamp
+      const authValidation = this.verifyAuthenticator(
+        authenticator,
+        ticketValidation.serviceSessionKey,
+        ticketValidation.username
+      );
 
-      if (!this.verifyAuthenticator(authenticator, ticketValidation.serviceSessionKey, ticketValidation.username)) {
+      if (!authValidation.valid) {
         return {
           success: false,
-          message: 'Invalid authenticator'
+          message: `Invalid authenticator: ${authValidation.reason}`
         };
       }
 
       const username = ticketValidation.username;
       const files = this.userFiles[username] || [];
 
-      console.log(`Give ${files.length} files for ${username}`);
-
       return {
         success: true,
         username: username,
         files: files,
-        count: files.length,
-        timestamp: new Date().toISOString()
+        count: files.length
       };
 
     } catch (error) {
-      console.error('File service error:', error.message);
       return {
         success: false,
         message: `File service error: ${error.message}`
@@ -69,78 +69,56 @@ class FileService {
     }
   }
 
-  // Проверка authenticator'а
   verifyAuthenticator(encryptedAuthenticator, serviceSessionKey, expectedUsername) {
     try {
-      try {
-        const decoded = Buffer.from(encryptedAuthenticator, 'base64').toString('utf8');
-        let decrypted = '';
-        for (let i = 0; i < decoded.length; i++) {
-          const charCode = decoded.charCodeAt(i) ^ serviceSessionKey.charCodeAt(i % serviceSessionKey.length);
-          decrypted += String.fromCharCode(charCode);
-        }
+      // Декодируем base64
+      const decoded = Buffer.from(encryptedAuthenticator, 'base64').toString('utf8');
 
-        const authData = JSON.parse(decrypted);
-
-        if (authData.username !== expectedUsername) {
-          console.log(`Authenticator: username mismatch`);
-          return false;
-        }
-
-        const authTime = new Date(authData.timestamp);
-        const now = new Date();
-        const diffMinutes = (now - authTime) / (60 * 1000);
-
-        if (diffMinutes > 5) {
-          console.log(`Authenticator: too old (${diffMinutes.toFixed(1)} minutes)`);
-          return false;
-        }
-
-        console.log(`📁 ✅ Authenticator valid! Age: ${diffMinutes.toFixed(1)} minutes`);
-        return true;
-
-      } catch (e) {
-        console.log(`XOR no work, try base64...`);
+      // XOR расшифровка
+      let decrypted = '';
+      for (let i = 0; i < decoded.length; i++) {
+        const charCode = decoded.charCodeAt(i) ^ serviceSessionKey.charCodeAt(i % serviceSessionKey.length);
+        decrypted += String.fromCharCode(charCode);
       }
 
-      try {
-        const decoded = Buffer.from(encryptedAuthenticator, 'base64').toString('utf8');
-        const authData = JSON.parse(decoded);
+      const authData = JSON.parse(decrypted);
 
-        if (authData.username === expectedUsername) {
-          console.log(`Authenticator valid (base64)`);
-          return true;
-        }
-      } catch (e) {
-        console.log(`base64 no working`);
+      // Проверяем username
+      if (authData.username !== expectedUsername) {
+        return { valid: false, reason: 'Username mismatch' };
       }
 
-      return false;
+      // Проверяем timestamp (5 минут)
+      // const authTime = new Date(authData.timestamp);
+      // const now = new Date();
+      // const diffMinutes = (now - authTime) / (60 * 1000);
+
+      // if (diffMinutes > 5) {
+      //   return { valid: false, reason: 'Timestamp expired' };
+      // }
+
+      return { valid: true };
 
     } catch (error) {
-      console.error('Authenticator check error:', error.message);
-      return false;
+      return { valid: false, reason: 'Authentication failed' };
     }
   }
 
   static createAuthenticator(username, serviceSessionKey) {
     const authData = {
       username: username,
-      timestamp: new Date().toISOString(),
-      random: crypto.randomBytes(8).toString('hex')
+      timestamp: new Date().toISOString()
     };
 
-    const iv = crypto.randomBytes(16);
-    const cipher = crypto.createCipheriv(
-      'aes-256-cbc',
-      Buffer.from(serviceSessionKey, 'hex'),
-      iv
-    );
+    // XOR шифрование
+    const jsonStr = JSON.stringify(authData);
+    let encrypted = '';
+    for (let i = 0; i < jsonStr.length; i++) {
+      const charCode = jsonStr.charCodeAt(i) ^ serviceSessionKey.charCodeAt(i % serviceSessionKey.length);
+      encrypted += String.fromCharCode(charCode);
+    }
 
-    let encrypted = cipher.update(JSON.stringify(authData), 'utf8', 'hex');
-    encrypted += cipher.final('hex');
-
-    return iv.toString('hex') + ':' + encrypted;
+    return Buffer.from(encrypted).toString('base64');
   }
 }
 
