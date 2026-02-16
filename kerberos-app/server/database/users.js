@@ -8,6 +8,11 @@ const usersDatabase = {
     password: 'qwerty123',
     name: 'Bob',
     services: ['files', 'email', 'print', 'admin']
+  },
+  'eva': {
+    password: 'aboba123',
+    name: 'Eva',
+    services: ['email']
   }
 }
 

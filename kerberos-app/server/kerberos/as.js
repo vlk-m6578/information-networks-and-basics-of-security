@@ -17,7 +17,8 @@ class AuthenticationServer {
 
     const validUsers = {
       'alice': 'password123',
-      'bob': 'qwerty123'
+      'bob': 'qwerty123',
+      'eva': 'aboba123'
     };
 
     if (!validUsers[username] || validUsers[username] !== password) {

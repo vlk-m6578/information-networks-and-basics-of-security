@@ -12,6 +12,12 @@ class TicketGrantingServer {
     };
 
     this.issuedServiceTickets = {};
+
+    this.accessRights = {
+      'alice': ['files', 'email', 'print'],
+      'bob': ['files', 'email', 'print', 'admin'],
+      'eva': ['email']
+    };
   }
 
   requestServiceTicket(tgtId, serviceName) {
@@ -19,6 +25,10 @@ class TicketGrantingServer {
 
     if (!tgtValidation.valid) throw new Error(`Invalid TGT: ${tgtValidation.reason}`);
     if (!this.serviceKeys[serviceName]) throw new Error(`Service "${serviceName}" not available`);
+
+    if (!this.hasAccess(tgtValidation.username, serviceName)) {
+      throw new Error(`Access denied: ${tgtValidation.username} cannot use ${serviceName}`);
+    }
 
     const serviceSessionKey = crypto.randomBytes(32).toString('hex');
     console.log(`TGS: Create a key for service: ${serviceSessionKey.substring(0, 16)}...`);
@@ -120,6 +130,11 @@ class TicketGrantingServer {
     let encrypted = cipher.update(text, 'utf8', 'hex');
     encrypted += cipher.final('hex');
     return iv.toString('hex') + ':' + encrypted;
+  }
+
+  hasAccess(username, serviceName) {
+    const userRights = this.accessRights[username] || [];
+    return userRights.includes(serviceName);
   }
 
 }

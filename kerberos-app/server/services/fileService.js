@@ -80,14 +80,13 @@ class FileService {
         return { valid: false, reason: 'Username mismatch' };
       }
 
-      // Проверяем timestamp (5 минут)
-      // const authTime = new Date(authData.timestamp);
-      // const now = new Date();
-      // const diffMinutes = (now - authTime) / (60 * 1000);
+      const authTime = new Date(authData.timestamp);
+      const now = new Date();
+      const diffMinutes = (now - authTime) / (60 * 1000);
 
-      // if (diffMinutes > 5) {
-      //   return { valid: false, reason: 'Timestamp expired' };
-      // }
+      if (diffMinutes > 5) {
+        return { valid: false, reason: 'Timestamp expired' };
+      }
 
       return { valid: true };
 
