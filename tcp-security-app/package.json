@@ -1,0 +1,17 @@
+{
+  "name": "tcp-security-lab",
+  "version": "1.0.0",
+  "description": "Лабораторная работа №4: Защита от атак при установке TCP-соединения",
+  "main": "demo/demo-script.js",
+  "scripts": {
+    "demo": "node demo/demo-script.js",
+    "server:protected": "node server/protected-server.js",
+    "server:vulnerable": "node server/vulnerable-server.js",
+    "attack:syn": "node clients/syn-flood-attacker.js",
+    "attack:slowloris": "node clients/slowloris-attacker.js",
+    "client:legit": "node clients/legitimate-client.js"
+  },
+  "keywords": ["security", "tcp", "network", "attacks", "syn-flood", "slowloris"],
+  "author": "Твое Имя",
+  "license": "MIT"
+}
