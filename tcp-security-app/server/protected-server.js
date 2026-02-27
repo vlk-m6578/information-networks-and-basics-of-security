@@ -110,11 +110,11 @@ class ProtectedServer {
             
             packetTimes = packetTimes.filter(t => now - t < 10000);
             
-            if (packetTimes.length > 5) {
+            if (packetTimes.length > 5 && bytesReceived > 0) {
                 const timeSpan = (packetTimes[packetTimes.length - 1] - packetTimes[0]) / 1000;
                 const rate = bytesReceived / timeSpan;
 
-                if (rate < 10 && bytesReceived > 0) {
+                if (rate < 10) {
                     log.defense(`Low transmission rate from ${clientIP}: ${rate.toFixed(2)} bytes/sec`);
                     log.defense(`It looks like Slowloris attack - closing the connection`);
                     
@@ -137,9 +137,7 @@ class ProtectedServer {
                 const response = this.generateHTTPResponse();
                 socket.write(response);
                 
-                if (!requestBuffer.includes('Connection: keep-alive')) {
-                    socket.end();
-                }
+                socket.end();
                 
                 requestBuffer = '';
             }
