@@ -5,58 +5,46 @@ class VulnerableServer {
     constructor(port = 8081) {
         this.port = port;
         this.server = net.createServer();
+        this.connections = [];
         this.setupServer();
     }
     
     setupServer() {
         this.server.on('connection', (socket) => {
             const clientIP = socket.remoteAddress;
-            log.warn(`УЯЗВИМЫЙ сервер принял соединение от ${clientIP} (без защиты)`);
+            this.connections.push(socket);
             
-            socket.setTimeout(15000);
+            log.warn(`УЯЗВИМЫЙ: подключился ${clientIP} (всего: ${this.connections.length})`);
             
-            socket.on('data', (data) => {
-                log.info(`Уязвимый сервер получил данные от ${clientIP}`);
-                
-                const response = [
-                    'HTTP/1.1 200 OK',
-                    'Content-Type: text/plain',
-                    '',
-                    'Vulnerable Server Response'
-                ].join('\r\n');
-                
-                socket.write(response);
-                socket.end();
-            });
-            
-            socket.on('timeout', () => {
-                log.warn(`УЯЗВИМЫЙ сервер: таймаут соединения с ${clientIP}`);
-                socket.destroy();
+            socket.on('data', () => {
+                // атака: ничего не делаем с данными
+                // просто держим соединение открытым
             });
             
             socket.on('close', () => {
-                log.info(`УЯЗВИМЫЙ сервер: соединение с ${clientIP} закрыто`);
+                const index = this.connections.indexOf(socket);
+                if (index > -1) this.connections.splice(index, 1);
+                log.warn(`УЯЗВИМЫЙ: соединение закрыто (осталось: ${this.connections.length})`);
             });
             
-            socket.on('error', (err) => {
-                log.error(`УЯЗВИМЫЙ сервер ошибка: ${err.message}`);
-            });
+            socket.on('error', () => {});
         });
     }
     
     start() {
         this.server.listen(this.port, () => {
-            log.section('УЯЗВИМЫЙ СЕРВЕР ЗАПУЩЕН (БЕЗ ЗАЩИТЫ)');
+            log.section('УЯЗВИМЫЙ СЕРВЕР');
             log.warn(`Порт: ${this.port}`);
-            log.warn(`ВНИМАНИЕ: Этот сервер не имеет защиты от атак!`);
-            log.warn(`(только базовый таймаут 15 сек для избежания вечных соединений)`);
-            console.log('');
+            log.warn(`НЕТ ЗАЩИТЫ. Принимает ВСЕ соединения`);
+            log.warn(`НЕ ОТВЕЧАЕТ на запросы`);
         });
     }
     
     stop() {
+        log.warn(`🛑 Закрываю ${this.connections.length} соединений...`);
+        this.connections.forEach(s => s.destroy());
         this.server.close();
-        log.warn('УЯЗВИМЫЙ сервер остановлен');
+        log.warn('Уязвимый сервер остановлен');
     }
 }
 
@@ -65,9 +53,4 @@ module.exports = VulnerableServer;
 if (require.main === module) {
     const server = new VulnerableServer(8081);
     server.start();
-    
-    process.on('SIGINT', () => {
-        server.stop();
-        process.exit();
-    });
 }

