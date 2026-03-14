@@ -1,0 +1,21 @@
+{
+  "name": "buffer-overflow-lab",
+  "version": "1.0.0",
+  "description": "Demonstration of buffer overflow attacks and protection mechanisms",
+  "main": "index.js",
+  "scripts": {
+    "start:vulnerable": "node server/vulnerable-server.js",
+    "start:protected": "node server/protected-server.js",
+    "attack:basic": "node attacks/basic-overflow.js",
+    "attack:protected": "node attacks/protection-mechanisms.js",
+    "demonstrate": "node attacks/attack-demonstration.js"
+  },
+  "dependencies": {
+    "axios": "^1.13.6",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.9.0",
+    "helmet": "^7.0.0"
+  }
+}
