@@ -29,8 +29,8 @@ class NormalClient {
     async testVariousInputs() {
         const testCases = [
             'Hello, World!',
-            'A'.repeat(500),  // Small input
-            'B'.repeat(1024), // Exactly buffer size
+            'A'.repeat(500),  
+            'B'.repeat(1024), 
             JSON.stringify({ user: 'admin', action: 'login' }),
             'Normal text with no exploit'
         ];
@@ -46,7 +46,6 @@ class NormalClient {
     }
 }
 
-// Example usage
 async function runNormalClient() {
     const client = new NormalClient('http://localhost:3001');
     await client.testVariousInputs();

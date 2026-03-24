@@ -72,7 +72,6 @@ class ProtectionDemonstration {
             console.log('Null byte detected and blocked:', error.response?.data);
         }
         
-        // Compare with vulnerable server
         console.log('\nCOMPARISON WITH VULNERABLE SERVER:');
         console.log('Testing same attack on vulnerable server...');
         
@@ -85,6 +84,5 @@ class ProtectionDemonstration {
     }
 }
 
-// Run demonstration
 const demo = new ProtectionDemonstration();
 demo.run().catch(console.error);

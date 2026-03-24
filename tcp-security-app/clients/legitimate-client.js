@@ -91,7 +91,7 @@ class LegitimateClient {
             if (this.success === 0) {
                 log.warn(`УЯЗВИМЫЙ СЕРВЕР: 0% успеха`);
             } else {
-                log.warn(`УЯЗВИМЫЙ СЕРВЕР: ${percent}% успеха - должно быть 0%`);
+                log.warn(`УЯЗВИМЫЙ СЕРВЕР: ${percent}% успеха - может быть 0%`);
             }
         }
         

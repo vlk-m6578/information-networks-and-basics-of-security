@@ -19,7 +19,7 @@ class ProtectedServer {
             if (currentCount >= this.maxPerIP) {
                 log.defense(`IP ${clientIP} превысил лимит (${this.maxPerIP})`);
                 try { 
-                    socket.write('HTTP/1.1 429 Too Many Connections\r\n\r\n');
+                    socket.write('HTTP/1.1 429 Too Many Connections\r\n\r\n');  
                     socket.end();
                 } catch (e) {}
                 socket.destroy();

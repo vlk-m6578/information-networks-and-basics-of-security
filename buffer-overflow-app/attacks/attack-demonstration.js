@@ -10,19 +10,16 @@ class FullDemonstration {
     async startServers() {
         console.log('Starting servers...');
         
-        // Start vulnerable server
         this.vulnerableServer = spawn('node', ['server/vulnerable-server.js']);
         this.vulnerableServer.stdout.on('data', (data) => {
             console.log(`[Vulnerable Server]: ${data}`);
         });
         
-        // Start protected server
         this.protectedServer = spawn('node', ['server/protected-server.js']);
         this.protectedServer.stdout.on('data', (data) => {
             console.log(`[Protected Server]: ${data}`);
         });
         
-        // Wait for servers to start
         await new Promise(resolve => setTimeout(resolve, 3000));
     }
     
@@ -40,28 +37,24 @@ class FullDemonstration {
         try {
             await this.startServers();
             
-            // Part 1: Normal behavior
             console.log('\nPART 1: NORMAL CLIENT BEHAVIOR');
             console.log('-' .repeat(40));
             
             const normalClient = new NormalClient('http://localhost:3001');
             await normalClient.testVariousInputs();
             
-            // Part 2: Attack demonstration on vulnerable server
             console.log('\nPART 2: ATTACKING VULNERABLE SERVER');
             console.log('-' .repeat(40));
             
             const attacker = new AttackClient('http://localhost:3000');
             await attacker.runAttackSuite();
-            
-            // Part 3: Protection demonstration
+
             console.log('\nPART 3: PROTECTION MECHANISMS IN ACTION');
             console.log('-' .repeat(40));
             
             const protectedAttacker = new AttackClient('http://localhost:3001');
             await protectedAttacker.attemptBypassProtection();
             
-            // Part 4: Comparison
             console.log('\nPART 4: COMPARISON SUMMARY');
             console.log('-' .repeat(40));
             
@@ -93,6 +86,5 @@ class FullDemonstration {
     }
 }
 
-// Run complete demonstration
 const demo = new FullDemonstration();
 demo.runDemonstration();

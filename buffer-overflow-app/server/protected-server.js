@@ -7,26 +7,23 @@ const BufferUtils = require('./server-utils');
 const app = express();
 const PORT = 3001;
 
-// Security middleware
-app.use(helmet()); // Adds various HTTP headers for security
 
-// Rate limiting
+app.use(helmet()); // secure http-headers
+
+// rate limiting
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 // limit each IP to 100 requests per windowMs
+    windowMs: 15 * 60 * 1000, 
+    max: 100 
 });
 app.use('/api/', limiter);
 
-// Strict body parsing with size limits
-app.use(bodyParser.json({ limit: '1kb' })); // Strict limit!
-app.use(bodyParser.text({ type: 'text/plain', limit: '1kb' })); // Strict limit!
+app.use(bodyParser.json({ limit: '1kb' })); 
+app.use(bodyParser.text({ type: 'text/plain', limit: '1kb' })); 
 
-// Input validation middleware
 const validateInput = (req, res, next) => {
     const contentLength = parseInt(req.headers['content-length'] || '0');
-    
-    // Check content length
-    if (contentLength > 1024) { // 1KB limit
+
+    if (contentLength > 1024) { 
         return res.status(413).json({
             error: 'Payload too large',
             maxSize: '1KB',
@@ -34,7 +31,6 @@ const validateInput = (req, res, next) => {
         });
     }
     
-    // Validate content type
     const contentType = req.headers['content-type'];
     if (!contentType || (!contentType.includes('application/json') && !contentType.includes('text/plain'))) {
         return res.status(415).json({
@@ -46,22 +42,18 @@ const validateInput = (req, res, next) => {
     next();
 };
 
-// Protected endpoint with bounds checking
 app.post('/api/protected/process', validateInput, (req, res) => {
     console.log('\n=== PROTECTED SERVER ENDPOINT HIT ===');
     
     let inputData = req.body;
     
-    // Handle different content types
     if (typeof inputData === 'object') {
         inputData = JSON.stringify(inputData);
     }
     
     try {
-        // Process with bounds checking
         const result = BufferUtils.protectedBufferHandler(inputData, 1024);
-        
-        // Check for shellcode
+
         const shellcodeDetected = BufferUtils.detectShellcode(inputData);
         if (shellcodeDetected.length > 0) {
             console.warn('Potential shellcode detected!', shellcodeDetected);
@@ -79,14 +71,11 @@ app.post('/api/protected/process', validateInput, (req, res) => {
     }
 });
 
-// Protected endpoint with additional security measures
 app.post('/api/protected/secure-process', [
     validateInput,
     (req, res, next) => {
-        // Additional security checks
         const input = req.body;
-        
-        // Check for null bytes (often used in exploits)
+
         if (input && input.toString().includes('\0')) {
             return res.status(400).json({
                 error: 'Null bytes detected in input',
@@ -101,7 +90,6 @@ app.post('/api/protected/secure-process', [
     
     const inputData = typeof req.body === 'object' ? JSON.stringify(req.body) : req.body;
     
-    // Multiple protection layers
     const protections = {
         boundsCheck: true,
         inputValidation: true,
@@ -111,7 +99,6 @@ app.post('/api/protected/secure-process', [
     };
     
     try {
-        // Process with all protections
         const result = BufferUtils.protectedBufferHandler(inputData, 1024);
         
         res.json({
@@ -129,7 +116,6 @@ app.post('/api/protected/secure-process', [
     }
 });
 
-// Start server
 app.listen(PORT, () => {
     console.log(`PROTECTED SERVER running on http://localhost:${PORT}`);
     console.log('Buffer overflow protection ENABLED');

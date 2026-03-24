@@ -47,6 +47,5 @@ class BasicOverflowDemonstration {
     }
 }
 
-// Run demonstration
 const demo = new BasicOverflowDemonstration();
 demo.run().catch(console.error);
