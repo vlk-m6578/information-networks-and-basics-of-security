@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Injection Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>SQL injection Attacks/Protection</h1>
+    </header>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="vulnerable">Vulnearble server</button>
+      <button class="tab-btn" data-tab="secure">Protected server</button>
+      <button class="tab-btn" data-tab="attack">Sql injection attack</button>
+    </div>
+
+    <div id="vulnerable" class="tab-content active">
+      <div class="card">
+        <h3>Login</h3>
+        <input type="text" id="vuln-username" placeholder="Username">
+        <input type="password" id="vuln-password" placeholder="Password">
+        <button onclick="vulnerableLogin()">Log in</button>
+        <div id="vuln-login-result" class="result"></div>
+      </div>
+
+      <div class="card">
+        <h3>Product search</h3>
+        <input type="text" id="vuln-search" placeholder="Serach...">
+        <button onclick="vulnerableSearch()">Search</button>
+        <div id="vuln-products-result" class="result"></div>
+      </div>
+
+      <div class="card">
+        <h3>Users view</h3>
+        <input type="text" id="vuln-user-id" placeholder="User ID">
+        <button onclick="vulnerableGetUser()">Show</button>
+        <div id="vuln-user-result" class="result"></div>
+      </div>
+    </div>
+
+    <div id="secure" class="tab-content">
+      <div class="card">
+        <h3>Login</h3>
+        <input type="text" id="secure-username" placeholder="Username">
+        <input type="password" id="secure-password" placeholder="Password">
+        <button onclick="secureLogin()">Log in</button>
+        <div id="secure-login-result" class="result"></div>
+      </div>
+
+      <div class="card">
+        <h3>Product search</h3>
+        <input type="text" id="secure-search" placeholder="Search...">
+        <button onclick="secureSearch()">Search</button>
+        <div id="secure-products-result" class="result"></div>
+      </div>
+
+      <div class="card">
+        <h3>Users view</h3>
+        <input type="text" id="secure-user-id" placeholder="User ID">
+        <button onclick="secureGetUser()">Show</button>
+        <div id="secure-user-result" class="result"></div>
+      </div>
+    </div>
+
+    <div id="attack" class="tab-content">
+      <div class="card attack-card">
+        <h3>Authentification bypass</h3>
+        <p>Enter Username: <code>admin' --</code></p>
+        <!-- <p>SQL: <code>SELECT * FROM users WHERE username = 'admin' -- ' AND password = '...'</code></p> -->
+        <button onclick="demoAttack1()">Show attack</button>
+        <div id="attack1-result" class="result"></div>
+      </div>
+
+      <div class="card attack-card">
+        <h3>Show users</h3>
+        <p>Enter: <code>' OR '1'='1' --</code></p>
+        <button onclick="demoAttack2()">Show attack</button>
+        <div id="attack2-result" class="result"></div>
+      </div>
+
+      <div class="card attack-card">
+        <h3>UNION atack</h3>
+        <p>Enter ID:
+          <code>1 UNION SELECT id, username, password, is_admin FROM users WHERE '1'='1</code>
+        </p>
+        <button onclick="demoAttack3()">Show attack</button>
+        <div id="attack3-result" class="result"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="client.js"></script>
+</body>
+
+</html>
