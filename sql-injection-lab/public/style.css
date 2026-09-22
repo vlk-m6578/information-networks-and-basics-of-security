@@ -153,17 +153,3 @@ code {
     color: #ed8936;
     font-weight: bold;
 }
-
-@media (max-width: 768px) {
-    .tabs {
-        flex-direction: column;
-    }
-    
-    .tab-btn {
-        padding: 10px;
-    }
-    
-    .container {
-        margin: 10px;
-    }
-}

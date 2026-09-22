@@ -1,4 +1,3 @@
-// Вкладки
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         const tabId = btn.dataset.tab;
@@ -10,8 +9,6 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         document.getElementById(tabId).classList.add('active');
     });
 });
-
-// ============= УЯЗВИМЫЕ ФУНКЦИИ =============
 
 async function vulnerableLogin() {
     const username = document.getElementById('vuln-username').value;
@@ -84,8 +81,6 @@ async function vulnerableGetUser() {
     }
 }
 
-// ============= ЗАЩИЩЕННЫЕ ФУНКЦИИ =============
-
 async function secureLogin() {
     const username = document.getElementById('secure-username').value;
     const password = document.getElementById('secure-password').value;
@@ -154,8 +149,6 @@ async function secureGetUser() {
         resultDiv.innerHTML = `<span class="error">Error: ${error.message}</span>`;
     }
 }
-
-// ============= ДЕМОНСТРАЦИЯ АТАК =============
 
 async function demoAttack1() {
     const resultDiv = document.getElementById('attack1-result');

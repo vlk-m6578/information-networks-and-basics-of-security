@@ -1,4 +1,3 @@
--- Инициализация базы данных
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
@@ -15,7 +14,6 @@ CREATE TABLE IF NOT EXISTS products (
     description TEXT
 );
 
--- Вставка тестовых данных
 INSERT OR IGNORE INTO users (username, password, email, is_admin) VALUES 
     ('admin', 'admin123', 'admin@example.com', 1),
     ('user1', 'password1', 'user1@example.com', 0),

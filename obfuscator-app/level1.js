@@ -1,177 +1,181 @@
-function a0_0x4e51() {
-    const _0x3f9af6 = [
-        '7836LThkIT',
-        'push',
-        '192340AjgDxl',
-        '_0xcec304',
-        '\x0aПароль:\x20',
-        'gmail.com',
-        '7TXrCWo',
-        '_0x49eb09',
-        '_0x176a42',
-        'ghp_secret123',
-        'gmail_pass456',
-        '_0x3e3e73',
-        'includes',
-        '16SrQbEa',
-        'Пароль\x20должен\x20быть\x20не\x20менее\x208\x20символов',
-        '18NIJIsb',
-        '\x0aЛогин:\x20',
-        'ОШИБКА:\x20Требуется\x20лицензия!',
-        'toString',
-        'PWD-MGR-2026-A1B2',
-        '1134354oFOWmV',
-        '_0x43e476',
-        'log',
-        'github.com',
-        'Установите\x20мастер-пароль:',
-        'Пароль\x20для\x20',
-        'myemail@gmail.com',
-        '_0x5e4db1',
-        'Требуется\x20мастер-пароль',
-        '103308XhFERf',
-        'service',
-        '6105RtfvFg',
-        '634870vRztum',
-        'Мастер-пароль\x20установлен',
-        'Запустите\x20в\x20браузере\x20для\x20работы\x20с\x20prompt/alert',
-        'toISOString',
-        '1114992GRtaaa',
-        '_0x22313a',
-        '1207vKUfQx',
-        '314UlHpsV',
-        'Лицензия\x20активирована!',
-        'netflix_pass789',
-        'netflix.com',
-        'length',
-        '\x20не\x20найден',
-        'forEach',
-        'PWD-MGR-2026-C3D4',
-        '_0x3f216b',
-        'username',
-        '\x20добавлен',
-        '_0x575f6b',
-        '_0x46067b',
-        '_0x40c5c2',
-        'password',
-        'Сервис\x20',
-        'Сначала\x20установите\x20мастер-пароль',
-        'user@netflix.com',
-        'Введите\x20лицензионный\x20ключ:'
-    ];
-    a0_0x4e51 = function () {
-        return _0x3f9af6;
-    };
-    return a0_0x4e51();
-}
-const a0_0xa3d4e4 = a0_0x5545;
-(function (_0x1ae6f5, _0x5b0d3d) {
-    const _0x4578f6 = a0_0x5545, _0x27c008 = _0x1ae6f5();
+const a0_0x175ab9 = a0_0x58e7;
+(function (_0x3958e5, _0x4e5d38) {
+    const _0x1a7721 = a0_0x58e7, _0x5ebc0c = _0x3958e5();
     while (!![]) {
         try {
-            const _0x2dc288 = parseInt(_0x4578f6(0x1b2)) / 0x1 * (parseInt(_0x4578f6(0x1b3)) / 0x2) + -parseInt(_0x4578f6(0x1a9)) / 0x3 * (parseInt(_0x4578f6(0x199)) / 0x4) + -parseInt(_0x4578f6(0x18e)) / 0x5 + parseInt(_0x4578f6(0x1a0)) / 0x6 * (parseInt(_0x4578f6(0x192)) / 0x7) + parseInt(_0x4578f6(0x1b0)) / 0x8 + -parseInt(_0x4578f6(0x19b)) / 0x9 * (-parseInt(_0x4578f6(0x1ac)) / 0xa) + parseInt(_0x4578f6(0x1ab)) / 0xb * (-parseInt(_0x4578f6(0x18c)) / 0xc);
-            if (_0x2dc288 === _0x5b0d3d)
+            const _0x4f964f = parseInt(_0x1a7721(0x1ba)) / 0x1 + -parseInt(_0x1a7721(0x1bd)) / 0x2 + -parseInt(_0x1a7721(0x194)) / 0x3 + parseInt(_0x1a7721(0x1ad)) / 0x4 * (parseInt(_0x1a7721(0x1c2)) / 0x5) + parseInt(_0x1a7721(0x18e)) / 0x6 + parseInt(_0x1a7721(0x1c0)) / 0x7 * (parseInt(_0x1a7721(0x19d)) / 0x8) + -parseInt(_0x1a7721(0x19c)) / 0x9 * (parseInt(_0x1a7721(0x1be)) / 0xa);
+            if (_0x4f964f === _0x4e5d38)
                 break;
             else
-                _0x27c008['push'](_0x27c008['shift']());
-        } catch (_0x2bedc5) {
-            _0x27c008['push'](_0x27c008['shift']());
+                _0x5ebc0c['push'](_0x5ebc0c['shift']());
+        } catch (_0x39edc3) {
+            _0x5ebc0c['push'](_0x5ebc0c['shift']());
         }
     }
-}(a0_0x4e51, 0x19f27));
-class PasswordManager {
+}(a0_0x3210, 0x2f152));
+class a0_0xc02699 {
     constructor() {
-        const _0x50f66a = a0_0x5545;
-        this[_0x50f66a(0x194)] = [], this[_0x50f66a(0x1be)] = null, this[_0x50f66a(0x197)] = ![];
+        const _0x24feb8 = a0_0x58e7;
+        this[_0x24feb8(0x192)] = [], this['_0x12d86e'] = null, this[_0x24feb8(0x193)] = ![];
     }
-    [a0_0xa3d4e4(0x1bf)](_0xb464ac) {
-        const _0x8d6f2b = a0_0xa3d4e4, _0x1d8e6d = [
-                _0x8d6f2b(0x19f),
-                _0x8d6f2b(0x1ba),
-                'PWD-MGR-2026-E5F6'
+    [a0_0x175ab9(0x197)](_0x46b4c2) {
+        const _0x1bc771 = a0_0x175ab9, _0x50e9b2 = [
+                _0x1bc771(0x1bf),
+                _0x1bc771(0x1c1),
+                _0x1bc771(0x18c)
             ];
-        if (!_0xb464ac)
+        if (!_0x46b4c2)
             return ![];
-        return this['_0x3e3e73'] = _0x1d8e6d[_0x8d6f2b(0x198)](_0xb464ac), this[_0x8d6f2b(0x197)];
+        return this[_0x1bc771(0x193)] = _0x50e9b2[_0x1bc771(0x195)](_0x46b4c2), this[_0x1bc771(0x193)];
     }
-    [a0_0xa3d4e4(0x1c0)](_0x49dfd1) {
-        const _0x17848b = a0_0xa3d4e4;
-        if (!this[_0x17848b(0x197)])
-            return console[_0x17848b(0x1a2)](_0x17848b(0x19d)), ![];
-        if (_0x49dfd1[_0x17848b(0x1b7)] < 0x8)
-            return console[_0x17848b(0x1a2)](_0x17848b(0x19a)), ![];
-        return this['_0x575f6b'] = this[_0x17848b(0x1a7)](_0x49dfd1), console[_0x17848b(0x1a2)](_0x17848b(0x1ad)), !![];
+    [a0_0x175ab9(0x1a5)](_0x32cb3a) {
+        const _0x6ce4a5 = a0_0x175ab9;
+        if (!this[_0x6ce4a5(0x193)])
+            return console['log'](_0x6ce4a5(0x1a8)), ![];
+        if (_0x32cb3a['length'] < 0x8)
+            return ![];
+        return this[_0x6ce4a5(0x1c6)] = this['_0x1141b7'](_0x32cb3a), console[_0x6ce4a5(0x18b)](_0x6ce4a5(0x1c5)), !![];
     }
-    [a0_0xa3d4e4(0x1a7)](_0x55a008) {
-        const _0x425635 = a0_0xa3d4e4;
-        let _0x2a933b = 0x0;
-        for (let _0x21eff7 = 0x0; _0x21eff7 < _0x55a008[_0x425635(0x1b7)]; _0x21eff7++) {
-            _0x2a933b = (_0x2a933b << 0x5) - _0x2a933b + _0x55a008['charCodeAt'](_0x21eff7), _0x2a933b = _0x2a933b & _0x2a933b;
+    [a0_0x175ab9(0x1a0)](_0x345e4e) {
+        const _0x5c59ba = a0_0x175ab9;
+        let _0x246f2d = 0x0;
+        for (let _0x33e1d8 = 0x0; _0x33e1d8 < _0x345e4e[_0x5c59ba(0x1a3)]; _0x33e1d8++) {
+            _0x246f2d = (_0x246f2d << 0x5) - _0x246f2d + _0x345e4e[_0x5c59ba(0x19b)](_0x33e1d8), _0x246f2d = _0x246f2d & _0x246f2d;
         }
-        return _0x2a933b[_0x425635(0x19e)](0x10);
+        return _0x246f2d[_0x5c59ba(0x198)](0x10);
     }
-    [a0_0xa3d4e4(0x1a1)](_0x1c15c8, _0x1a2e08, _0x1e4926) {
-        const _0x3b8a3e = a0_0xa3d4e4;
-        if (!this[_0x3b8a3e(0x1be)])
-            return console[_0x3b8a3e(0x1a2)](_0x3b8a3e(0x189)), ![];
-        return this['_0x176a42'][_0x3b8a3e(0x18d)]({
-            'service': _0x1c15c8,
-            'username': _0x1a2e08,
-            'password': this['_0x49eb09'](_0x1e4926),
-            '_0x5903fe': new Date()[_0x3b8a3e(0x1af)]()
-        }), console[_0x3b8a3e(0x1a2)](_0x3b8a3e(0x1a5) + _0x1c15c8 + _0x3b8a3e(0x1bd)), !![];
+    [a0_0x175ab9(0x19f)](_0x31b723, _0x29b869, _0x47c1b9) {
+        const _0x53147c = a0_0x175ab9;
+        if (!this[_0x53147c(0x1c6)])
+            return console[_0x53147c(0x18b)](_0x53147c(0x1b4)), ![];
+        return this['_0x392953'][_0x53147c(0x1b1)]({
+            'service': _0x31b723,
+            'username': _0x29b869,
+            'password': this[_0x53147c(0x1a7)](_0x47c1b9),
+            '_0x58e258': new Date()['toISOString']()
+        }), console[_0x53147c(0x18b)](_0x53147c(0x1ab) + _0x31b723 + _0x53147c(0x18d)), !![];
     }
-    [a0_0xa3d4e4(0x193)](_0x58057b) {
-        return btoa(_0x58057b);
+    [a0_0x175ab9(0x1a7)](_0x10eb79) {
+        return btoa(_0x10eb79);
     }
-    [a0_0xa3d4e4(0x18f)](_0x27ccee) {
-        return atob(_0x27ccee);
+    [a0_0x175ab9(0x19e)](_0x7baff3) {
+        return atob(_0x7baff3);
     }
-    [a0_0xa3d4e4(0x1bb)](_0xea0d27) {
-        const _0x21834c = a0_0xa3d4e4;
-        if (!this[_0x21834c(0x1be)])
-            return console[_0x21834c(0x1a2)]('Требуется\x20мастер-пароль'), null;
-        const _0x53e857 = this[_0x21834c(0x194)]['find'](_0x7f06f7 => _0x7f06f7['service'] === _0xea0d27);
-        if (_0x53e857)
+    ['_0x2c190c'](_0x4ffea8) {
+        const _0x741509 = a0_0x175ab9;
+        if (!this['_0x12d86e'])
+            return console[_0x741509(0x18b)](_0x741509(0x1b8)), null;
+        const _0x405f07 = this['_0x392953'][_0x741509(0x1b2)](_0x3ff6ce => _0x3ff6ce['service'] === _0x4ffea8);
+        if (_0x405f07)
             return {
-                'service': _0x53e857[_0x21834c(0x1aa)],
-                'username': _0x53e857['username'],
-                'password': this['_0xcec304'](_0x53e857[_0x21834c(0x187)])
+                'service': _0x405f07[_0x741509(0x1c4)],
+                'username': _0x405f07['username'],
+                'password': this['_0x257cab'](_0x405f07[_0x741509(0x1a6)])
             };
-        return console[_0x21834c(0x1a2)](_0x21834c(0x188) + _0xea0d27 + _0x21834c(0x1b8)), null;
+        return console[_0x741509(0x18b)](_0x741509(0x1b7) + _0x4ffea8 + _0x741509(0x1ac)), null;
     }
-    ['_0x22313a']() {
-        const _0x28bc07 = a0_0xa3d4e4;
-        if (!this[_0x28bc07(0x1be)]) {
-            console['log'](_0x28bc07(0x1a8));
+    [a0_0x175ab9(0x1a4)]() {
+        const _0x3c3496 = a0_0x175ab9;
+        if (!this[_0x3c3496(0x1c6)]) {
+            console[_0x3c3496(0x18b)](_0x3c3496(0x1b8));
             return;
         }
-        console[_0x28bc07(0x1a2)]('Сохраненные\x20сервисы:'), this[_0x28bc07(0x194)][_0x28bc07(0x1b9)](_0xa45544 => {
-            const _0x18e365 = _0x28bc07;
-            console['log']('-\x20' + _0xa45544[_0x18e365(0x1aa)] + '\x20(' + _0xa45544['username'] + ')');
+        console[_0x3c3496(0x18b)](_0x3c3496(0x191)), this[_0x3c3496(0x192)][_0x3c3496(0x190)](_0x48e96f => {
+            const _0xfeac36 = _0x3c3496;
+            console[_0xfeac36(0x18b)]('-\x20' + _0x48e96f[_0xfeac36(0x1c4)] + '\x20(' + _0x48e96f[_0xfeac36(0x1c3)] + ')');
         });
     }
 }
-function demo() {
-    const _0x539091 = a0_0xa3d4e4, _0x41f4fd = new PasswordManager();
-    console['log']('===\x20Менеджер\x20паролей\x20===\x0a');
-    const _0x1f0469 = prompt(_0x539091(0x18b));
-    if (!_0x41f4fd['_0x46067b'](_0x1f0469)) {
-        alert('Недействительная\x20лицензия!\x20Программа\x20будет\x20закрыта.');
+function a0_0x2377d4() {
+    const _0x238b5a = a0_0x175ab9, _0x2e649e = new a0_0xc02699();
+    console['log'](_0x238b5a(0x1b0));
+    const _0x4b04f4 = prompt(_0x238b5a(0x1bc));
+    if (!_0x2e649e['_0x1e2ef1'](_0x4b04f4)) {
+        alert(_0x238b5a(0x18f));
         return;
     }
-    alert(_0x539091(0x1b4));
-    const _0x2e7daf = prompt(_0x539091(0x1a4));
-    if (!_0x41f4fd['_0x40c5c2'](_0x2e7daf))
+    alert(_0x238b5a(0x1a1));
+    const _0x489a1e = prompt(_0x238b5a(0x1af));
+    if (!_0x2e649e['_0x55469d'](_0x489a1e))
         return;
-    _0x41f4fd['_0x43e476'](_0x539091(0x1a3), 'user@email.com', _0x539091(0x195)), _0x41f4fd[_0x539091(0x1a1)](_0x539091(0x191), _0x539091(0x1a6), _0x539091(0x196)), _0x41f4fd[_0x539091(0x1a1)](_0x539091(0x1b6), _0x539091(0x18a), _0x539091(0x1b5)), _0x41f4fd[_0x539091(0x1b1)]();
-    const _0x371ad4 = prompt('Введите\x20сервис\x20для\x20получения\x20пароля:'), _0x294194 = _0x41f4fd[_0x539091(0x1bb)](_0x371ad4);
-    _0x294194 && alert('Сервис:\x20' + _0x294194[_0x539091(0x1aa)] + _0x539091(0x19c) + _0x294194[_0x539091(0x1bc)] + _0x539091(0x190) + _0x294194[_0x539091(0x187)]), console['log']('\x0aПрограмма\x20завершена');
+    _0x2e649e[_0x238b5a(0x19f)](_0x238b5a(0x196), 'user@email.com', 'ghp_secret123'), _0x2e649e['_0x528592'](_0x238b5a(0x1a2), _0x238b5a(0x1b9), _0x238b5a(0x199)), _0x2e649e[_0x238b5a(0x19f)](_0x238b5a(0x19a), _0x238b5a(0x1bb), _0x238b5a(0x1a9)), _0x2e649e[_0x238b5a(0x1a4)]();
+    const _0x18753d = prompt(_0x238b5a(0x1aa)), _0x5e75e7 = _0x2e649e[_0x238b5a(0x1b5)](_0x18753d);
+    _0x5e75e7 && alert(_0x238b5a(0x189) + _0x5e75e7[_0x238b5a(0x1c4)] + _0x238b5a(0x1b6) + _0x5e75e7[_0x238b5a(0x1c3)] + '\x0aПароль:\x20' + _0x5e75e7['password']), console[_0x238b5a(0x18b)](_0x238b5a(0x1b3));
 }
-function a0_0x5545(_0x3b0644, _0x5956b8) {
-    _0x3b0644 = _0x3b0644 - 0x187;
-    const _0x4e5193 = a0_0x4e51();
-    let _0x5545ee = _0x4e5193[_0x3b0644];
-    return _0x5545ee;
+function a0_0x3210() {
+    const _0x26d597 = [
+        '626868JWpegO',
+        'Недействительная\x20лицензия!\x20Программа\x20будет\x20закрыта.',
+        'forEach',
+        'Сохраненные\x20сервисы:',
+        '_0x392953',
+        '_0x2dd2ee',
+        '23832gDLhoa',
+        'includes',
+        'github.com',
+        '_0x1e2ef1',
+        'toString',
+        'gmail_pass456',
+        'netflix.com',
+        'charCodeAt',
+        '267489gvucPI',
+        '22288yIfbGm',
+        '_0x257cab',
+        '_0x528592',
+        '_0x1141b7',
+        'Лицензия\x20активирована!',
+        'gmail.com',
+        'length',
+        '_0x16ffe0',
+        '_0x55469d',
+        'password',
+        '_0x297f1d',
+        'ОШИБКА:\x20Требуется\x20лицензия!',
+        'netflix_pass789',
+        'Введите\x20сервис\x20для\x20получения\x20пароля:',
+        'Пароль\x20для\x20',
+        '\x20не\x20найден',
+        '44nPXmOP',
+        'Запустите\x20в\x20браузере\x20для\x20работы\x20с\x20prompt/alert',
+        'Установите\x20мастер-пароль:',
+        '===\x20Менеджер\x20паролей\x20===\x0a',
+        'push',
+        'find',
+        '\x0aПрограмма\x20завершена',
+        'Сначала\x20установите\x20мастер-пароль',
+        '_0x2c190c',
+        '\x0aЛогин:\x20',
+        'Сервис\x20',
+        'Требуется\x20мастер-пароль',
+        'myemail@gmail.com',
+        '188504SkXdVB',
+        'user@netflix.com',
+        'Введите\x20лицензионный\x20ключ:',
+        '572290UYnpmr',
+        '100HYVapi',
+        'PWD-MGR-2026-A1B2',
+        '399LbxlYP',
+        'PWD-MGR-2026-C3D4',
+        '151075AJDIwe',
+        'username',
+        'service',
+        'Мастер-пароль\x20установлен',
+        '_0x12d86e',
+        'Сервис:\x20',
+        'undefined',
+        'log',
+        'PWD-MGR-2026-E5F6',
+        '\x20добавлен'
+    ];
+    a0_0x3210 = function () {
+        return _0x26d597;
+    };
+    return a0_0x3210();
 }
-typeof window !== 'undefined' ? demo() : console['log'](a0_0xa3d4e4(0x1ae));
+function a0_0x58e7(_0x40cdc1, _0x4aa352) {
+    _0x40cdc1 = _0x40cdc1 - 0x189;
+    const _0x321089 = a0_0x3210();
+    let _0x58e71e = _0x321089[_0x40cdc1];
+    return _0x58e71e;
+}
+typeof window !== a0_0x175ab9(0x18a) ? a0_0x2377d4() : console[a0_0x175ab9(0x18b)](a0_0x175ab9(0x1ae));
